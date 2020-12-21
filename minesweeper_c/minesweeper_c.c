@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-
 int main(){
     int const row = 9;
     int const col = 9;
@@ -14,28 +13,58 @@ int main(){
     //미구현 폭탄 개수 세서 테이블값 set
     board_set(board,row,col);
     print_board(board,row,col);
+
     //미구현 커서 기능 넣을 것
-    cursor(board,row,col);
+    //cursor(board,row,col);
+    move_cur(0,36);
+    
     
     return 0;
 
 }
 
+void move_cur(int x, int y)
+{
+        printf("\033[%dd\033[%dG", y, x);
+}
+
+
+void cursor(int (*board)[9], int row,int col){
+    
+
+
+}
+
+
 void board_set(int (*board)[9],int row,int col) {
     int i=0;
     int j=0;
+    int bomb_count =0;
+    int k=0;
+    int l=0;
     for(i=0;i<row;i++){
         for(j=0;j<col;j++){
+            bomb_count = 0;
             if(board[i][j] != -1){
-                if(i-1 != -1){
-                    
-                }
-                if(i != row){
-                    
-                }
+                for(k=-1;k<2;k++){
+                    for(l=-1;l<2;l++){
 
+                        if(i+k > 0 && i+k < row){
+                            if(j+l > 0 && j+l < col){
+                                if(board[i+k][j+l] == -1){
+                                    bomb_count++;
+                                }
+                            }
+                        }
+                    }
+                }
             }
-
+            if(board[i][j] != -1)
+            {
+                board[i][j] = bomb_count;
+            }
+        }
+    }
 
 }
 
