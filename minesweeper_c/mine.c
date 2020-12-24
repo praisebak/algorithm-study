@@ -5,32 +5,26 @@ int main(){
     int const row = 9;
     int const col = 9;
     int board[9][9];
-    
+
     printf("9x9 지뢰찾기 입니다\n");
-    
+    printf("빙\n");
+
     init(board,row,col);
     bomb_set(board,row,col);
-    //미구현 폭탄 개수 세서 테이블값 set
     board_set(board,row,col);
     print_board(board,row,col);
 
-    //미구현 커서 기능 넣을 것
-    //cursor(board,row,col);
-    move_cur(0,36);
-    
-    
+    cursor(board,row,col);
+
+
     return 0;
 
 }
 
-void move_cur(int x, int y)
-{
-        printf("\033[%dd\033[%dG", y, x);
-}
 
 
 void cursor(int (*board)[9], int row,int col){
-    
+
 
 
 }
@@ -91,7 +85,7 @@ void init(int (*board)[9],int row,int col){
     int j=0;
     for(i=0;i<row;i++){
         for(j=0;j<col;j++){
-           board[i][j]=0;
+            board[i][j]=0;
         }
     }
 
@@ -118,10 +112,8 @@ void bomb_set(int (*board)[9],int row,int col){
         }else{
             board[rand_row][rand_col] = -1;
         }
-        
+
     }
 
 }
-
-
 
