@@ -2,25 +2,47 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdbool.h>
+#include <string.h>
+#include <ncurses.h>
 
-#include <curses.h>
+
+void test(){
+    char mesg[]="Just a string";            /* message to be appeared on the screen */
+    char mesg2[]="um";
+    int row,col;                            /* to store the number of rows and *
+                                             * the number of colums of the screen */
+    initscr();                              /* start the curses mode */
+    mvprintw(0,0,"%s",mesg);         /* print the message at the*/
+    getch();
+
+    ietmaxyx(stdscr,row,col);               /* get the number of rows and columns */
+    mvprintw(0,0,"%s",mesg2);         /* print the message at the*/
+    mvprintw(row-2,0,"This screen has %d rows and %d columns\n",row,col);
+    printw("Try resizing your window(if possible) and then run this program again");
+    refresh();
+    getch();
+    endwin();
+
+    return 0;
+
+
+    //mvprintw(row/2,(col-strlen(mesg))/2,"%s",mesg);
+
+
+
+
+
+}
 
 void main(){
+    test();
+    return 0;
     initscr();
-    int x=10;
-    int y=10;
-    printf("asdf"); 
-    move(100,150);
+    int x=500;
+    int y=500;
+    mvprintw(x,y,"*********************************************");
     refresh();
-    printf("abc\n");
-
     endwin();
-    
-
-    while(1){
-
-    }
-
     return 0;
 
     int const row = 9;
