@@ -1,6 +1,6 @@
 #include <iostream>
-
 using namespace std;
+
 void prtStar(int n)
 {
 	int starCount = 0;
@@ -38,7 +38,4 @@ int main()
 	int n;
 	cin >> n;
 	prtStar(n);
-
-
-
 }
