@@ -8,7 +8,7 @@ void initFibo()
 	numCount[0] = 0;
 	numCount[1] = 1;
 	numCount[2] = 2;
-	numCount[3] = 4;  
+	numCount[3] = 4;
 }
 
 int countAddCase(int num)
