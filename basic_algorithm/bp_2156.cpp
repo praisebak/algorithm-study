@@ -21,36 +21,25 @@ using namespace std;
 */
 void solve(int n)
 {
-	int numArr[n+3] = {0};
-	int continuousOccur = 1;
-	int sum = 0;
-	
-	for(int i=1;i<=n;++i)
+	int scoreArr[n+1] = {0};
+	int sumArr[n+1] = {0};
+	for(int i=1;i<=n;i++)
 	{
-		cin >> numArr[i];
+		cin >> scoreArr[i];
 	}
 
-	sum = numArr[1];
+	sumArr[1] = scoreArr[1];
+	sumArr[2] = scoreArr[1] + scoreArr[2];
 
-	for(int i=2;i<=n;++i)
+
+	for(int i=3;i<=n;i++)
 	{
-		++continuousOccur;
-		if(continuousOccur == 3)
-		{
-			if(numArr[i] + numArr[i-1] >  numArr[i] + numArr[i-2])
-			{
-				
-			}
-			else
-			{
-				continuousOccur = 0;
-			}
-			
-			continue;
-		}
-		sum += numArr[i];
+		sumArr[i] = scoreArr[i-1] + scoreArr[i] + sumArr[i-3];
+		sumArr[i] = max(sumArr[i], sumArr[i-2] + scoreArr[i]);
+		sumArr[i] = max(sumArr[i], sumArr[i-1]);
 	}
-	cout << sum;
+	cout << sumArr[n];
+
 
 }
 
@@ -59,7 +48,6 @@ int main()
 	int n = 0;
 	cin >> n;	
 	solve(n);
-
 
 }
 
