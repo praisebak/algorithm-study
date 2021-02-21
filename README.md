@@ -75,9 +75,47 @@ max(1, 2);
 max({1, 2, 3});
 ```
 
+### stoll 사용법
 
+```
+string num1;
+string num2;
+string num3;
+string num4;
+long long resultNum1;
+long long resultNum2;
+num1 = num1 + num2;
+num3 = num3 + num4;
+resultNum1 = stoll(num1);
+resultNum2 = stoll(num3);
+```
 
-​	
+### vector, sort 사용법
+
+```
+//string일때 정렬 구현 한번 생각해보자
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string>
+using namespace std;
+void solve()
+{
+	string str;
+	cin >> str;
+	vector<string> v;
+    for (int i = 0; i < str.length(); i++)
+    {
+		v.push_back(str.substr(i, str.length()));
+    }
+    sort(v.begin(),v.end());
+    for(int i=0;i<str.length();i++)
+    {
+    	cout << v[i] << '\n';
+    }
+}
+
+```
 
 
 

@@ -12,13 +12,12 @@ void solve()
     int idx = 0;
     for(int i=0;i<str.length();i++)
     {
-    	idx = str[i] - '0' - 48;
-    	num[idx] += 1;
-
+       idx = str[i] - '0' - 48;
+       num[idx] += 1;
     }
     for(int i=1;i<=26;i++)
     {
-    	cout << num[i] << " ";
+       cout << num[i] << " ";
     }
 
 }  
