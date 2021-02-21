@@ -2,8 +2,8 @@
 #include <fstream>
 using namespace std;
 
-string name[100001];
-string sortedName[100001];
+string name[100001] = NULL;
+string sortedName[100001] = NULL;
 int age[100001] = {0};
 int sortedAge[100001] = {0};
 
