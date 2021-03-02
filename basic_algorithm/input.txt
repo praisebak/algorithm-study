@@ -1,1 +1,6 @@
-baekjoon
+h g f w r
+4
+h g
+h f
+g r
+g w
