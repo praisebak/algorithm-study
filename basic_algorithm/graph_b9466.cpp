@@ -1,7 +1,7 @@
 #include <iostream>
-#include <stack>
+#include <queue>
 using namespace std;
-const int MAX = 100001;
+//coutnst int MAX = 100001;
 
 /*
 배열로 구현 해보기
@@ -13,13 +13,12 @@ class Graph
 {
 public:
 	int haveTeamStudent = 0;
-	bool done[MAX];
-	int graph[MAX];
+	bool *done;
+	bool *visit;
+	int *graph;
+	int studentNumber = 0;
 	Graph()
 	{	
-		fill_n(done,MAX,false);
-		fill_n(graph,MAX,0);
-
 
 	}
 	void DFS(int startV);
@@ -28,51 +27,47 @@ public:
 
 void Graph :: DFS(int startV) 
 {
-	int curV = 0;
-	bool visit[MAX];
-	stack<int> s;
-	s.push(startV);
-	fill_n(visit,MAX,false);
-	cout << "시작점 : " << startV <<"\n";
-	while(s.size()!= 0)
+	int curV = startV;
+	//coutut << "시작 "<<curV << "\n";
+	queue<int> tmp;
+	while(1)
 	{
-		curV = s.top();
-		s.pop();
-		/*
-		2가지.
-		자기 자신을 향할 때
-		향하지 않을 때
-		*/
 		if(done[curV])
-		{
 			return;
-		}
 		if(visit[curV])
 		{
-			if(curV == graph[curV])
+			//coutut << "중복" << curV << "\n";
+			if(graph[curV] == curV)
 			{
-				done[curV] = true;
+				//coutut << "1 추가\n";
 				haveTeamStudent++;
+				done[curV] = true;
 				return;
 			}
-			int studentCount = 1;
-			cout << "시작 정점 " << startV <<" 현재 정점 : " << graph[curV] << " 목표 : " << curV << "\n";
-			for(int iter = graph[curV];iter!=curV;iter = graph[iter])
-			{
-				cout << startV << "시정 " << iter << " " << curV << "\n";
-				studentCount++;
-			}
-			cout << "\n 팀원 수 : " << studentCount << "\n";
-			haveTeamStudent += studentCount;
-			return;
 
+			while(tmp.size()!=0)
+			{
+				done[tmp.front()] = true;
+				//coutut << tmp.front() << " ";
+				if(tmp.front() == curV)
+				{
+					haveTeamStudent += tmp.size();
+					//coutut << tmp.size() <<" 추가 \n";
+					return;
+				}
+
+				tmp.pop();
+			}
+			return;
 		}
+
+		tmp.push(curV);
 		visit[curV] = true;
-		s.push(graph[curV]);
+		curV = graph[curV];
 
 	}
 
-
+	
 
 
 
@@ -80,21 +75,33 @@ void Graph :: DFS(int startV)
 
 void solve()
 {
-	int testCase = 0;
+	int testCase = 1;
 	int studentNum = 0;
 	cin >> testCase;
 	for(int i=0;i<testCase;i++)
 	{
 		if(i != 0)
 		{
-			cout << "\n";
+			////////////coutut << "\n";
 		}
 		Graph g = Graph();
 		cin >> studentNum;
+
+		int tmpArr[studentNum+1];
+		bool tmpArr2[studentNum+1];
+		bool tmpArr3[studentNum+1];
+		g.graph = tmpArr;
+		g.done = tmpArr2;
+		g.visit = tmpArr3;
+		g.studentNumber = studentNum;
+
 		for(int student=1;student <=studentNum;student++)
 		{
 			cin >> g.graph[student];
+			tmpArr2[student] = false;
+			tmpArr3[student] = false;
 		}
+
 		for(int student=1;student <= studentNum;student++)
 		{
 			if(g.haveTeamStudent == studentNum)
@@ -103,12 +110,11 @@ void solve()
 			}
 			if(g.done[student])
 			{
-				continue;
+				//coutntinue;
 			}
 			g.DFS(student);
 		}
-		//cout << g.haveTeamStudent << "남음\n";
-		cout << studentNum - g.haveTeamStudent;
+		cout << studentNum - g.haveTeamStudent << "\n";
 	}
 
 
