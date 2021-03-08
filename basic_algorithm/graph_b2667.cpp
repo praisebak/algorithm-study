@@ -5,27 +5,19 @@
 
 using namespace std;
 const int MAX = 1001;
-class Graph
+
+struct
 {
-public:
-	int visit[MAX];
-	vector<int> houseSet;
-	vector<vector<int>> graph;
-	Graph()
-	{
-	}
-	void connectEdge(int v,int e);
-
-	void BFS(int startV);
+	int num;
 
 
-};
+
+}
 
 
 
 void Graph::connectEdge(int v,int e)
 {
-	
 	graph[v].push_back(e);
 	if(v == e)
 	{
@@ -43,13 +35,10 @@ void Graph:: BFS(int startV)
 	int curV = 0;
 	int notVisited = 1;
 	int houseCount = 1;
-	//cout << "BFS 시작점 : " << startV<< "\n연결된 개수 = ";
-	//cout << graph[startV].size() << "\n";
 	visit[startV] = true;
 
 	if(graph[startV].size() == 1)
 	{
-
 		houseSet.push_back(houseCount);
 		return;
 	}
@@ -65,17 +54,15 @@ void Graph:: BFS(int startV)
 			{
 				continue;
 			}
-			////cout << "이어진 점 : " << graph[curV][i] << "\n";
 
 			notVisited = 0;
 			que.push(graph[curV][i]);
 			visit[graph[curV][i]] = true;
 
-			////cout << "카운트 증가 : "<< graph[curV][i] << "\n\n";
 			houseCount++;
 		}
 	}
-	////cout << "집단의 집 수 : " << houseCount << "\n";
+
 	if(!notVisited)
 	{
 		houseSet.push_back(houseCount);
@@ -106,18 +93,13 @@ void solve()
 		char input[n];
 		char prevRow[n];
 
-		//////cout << "*" << row+1 << "번째 줄\n";
 		for(int cal = 0;cal<n;cal++,idx++)
 		{
 			cin >> input[cal];
-			//가로 
-			//현재가 1
 			if(input[cal] - '0')
 			{
-				//맨 앞부분
 				if(cal == 0)
 				{
-					//cout << "사이클 만듦\n";
 					g.connectEdge(idx,idx);
 				}
 				else if(input[cal-1] - '0')
@@ -126,10 +108,8 @@ void solve()
 				}
 				else
 				{
-					//cout << "사이클 만듦2\n";
 					g.connectEdge(idx,idx);
 				}
-				//cout << idx <<"입니다\n";
 			}
 			
 			if(row != 0)
@@ -140,7 +120,6 @@ void solve()
 				}
 
 			}
-			//위만 봐줌
 		}
 
 		for(int i=0;i<n;i++)
@@ -173,5 +152,4 @@ void solve()
 int main()
 {
 	solve();
-
 }
