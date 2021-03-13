@@ -42,6 +42,7 @@ int DFS(int startV)
 	stack <int> s;
 	s.push(startV);
 	int curV = 0;
+	
 	while(s.size()!= 0)
 	{
 		curV = s.top();
@@ -193,7 +194,7 @@ void solve()
 		
 		edgeConnect(width,height);
 		
-		for(int i = 0;i<maxIdx;i++)
+			for(int i = 0;i<maxIdx;i++)
 		{
 			if(!visit[i])
 			{
