@@ -48,6 +48,7 @@ int DFS(int startV)
 	s.push(startV);
 	int curV = 0;
 	//cout << "시작 정점 : " << startV << "\n";
+	
 	while(s.size()!= 0)
 	{
 		curV = s.top();
@@ -211,17 +212,20 @@ void solve()
 		edgeConnect(width,height);
 		for(int i = 0;i<maxIdx;i++)
 		{
-			if(!visit[i])
+			for(int i = 0;i<maxIdx;i++)
 			{
-				int result = 0;
-				//cout << i << "번째 DFS 시작\n";
-				result = DFS(i);
-				if(result)
+				if(!visit[i])
 				{
-					//cout << i << "번째 DFS의 탐색 성공\n";
-				}
-				landCount += result;
+					int result = 0;
+					//cout << i << "번째 DFS 시작\n";
+					result = DFS(i);
+					if(result)
+					{
+						//cout << i << "번째 DFS의 탐색 성공\n";
+					}
+					landCount += result;
 
+				}
 			}
 		}
 		cout << landCount << "\n";
