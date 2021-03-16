@@ -7,16 +7,18 @@ const int MAX = 100;
 const int INF = 987654321;
 int mapSize = 0;
 int map[MAX][MAX];
-int visit[MAX][MAX];
+bool visit[MAX][MAX];
+
 //왼 오 상 하
 int check[4][2] = {{0,-1},{0,1},{-1,0},{1,0}};
-queue<pair<int,int>> q;
-
-
-
 //섬 마킹
+
+
+
+
 void BFSMarking(int startX,int startY,int numberOfLand)
 {
+	queue<pair<int,int>> q;
 	q.push(make_pair(startX,startY));
 
 	int nextX = 0;
@@ -38,7 +40,7 @@ void BFSMarking(int startX,int startY,int numberOfLand)
 			nextX = startX + check[i][1];
 			if((nextX >= 0 && nextX <mapSize) && (nextY >= 0 && nextY <mapSize))
 			{
-				if(!visit[nextY][nextX] && map[nextY][nextX])
+				if(map[nextY][nextX] && !visit[nextY][nextX])
 				{
 					q.push(make_pair(nextX,nextY));
 				}
@@ -46,15 +48,13 @@ void BFSMarking(int startX,int startY,int numberOfLand)
 			
 		}
 	}
+
 }
 
 int BFS(int land)
 {
 	int count = 0;
-	while(q.size() != 0)
-	{
-		q.pop();
-	}
+	queue<pair<int,int>> q;
 	int nextX,nextY,startX,startY;
 
 	for(int i=0;i<mapSize;i++)
@@ -64,18 +64,21 @@ int BFS(int land)
 			if(map[i][j] == land)
 			{
 				q.push(make_pair(j,i));
+				//cout << "값 : " << map[i][j] << " land : " << land << "\n";
+				//cout << i << " " << j << "pair 추가\n";
 				visit[i][j] = 1;
 			}
 		}
 	}	
 
 
-
+	int qSize = 0;
 	while(q.size() != 0)
 	{
-
-		for(int k=0;k<q.size();k++)
+		qSize = q.size();
+		for(int k=0;k<qSize;k++)
 		{
+
 			startX = q.front().first;
 			startY = q.front().second;
 			q.pop();
@@ -85,22 +88,20 @@ int BFS(int land)
 				nextY = startY + check[i][0];
 				if((nextX >= 0 && nextX < mapSize) && (nextY >= 0 && nextY < mapSize))
 				{
+					
 					if(map[nextY][nextX] && map[nextY][nextX] != land)
 					{
 						return count;
 					}
-					else if(!map[nextY][nextX] && !visit[nextY][nextX])
+					else if(!(map[nextY][nextX]) && !(visit[nextY][nextX]))
 					{
-						visit[nextY][nextX] = true;
+						visit[nextY][nextX] = 1;
 						q.push(make_pair(nextX,nextY));
 					}
 				}
-
-				
 			}
 		}
 		count++;
-
 	} 
 
 
@@ -126,8 +127,6 @@ void solve()
 	init();
 	int curX,curY,numberOfLand = 1,result = INF;
 
-
-
 	for(int i=0;i<mapSize;i++)
 	{
 		for(int j=0;j<mapSize;j++)
@@ -141,15 +140,13 @@ void solve()
 		}
 	}
 
+
 	for(int land=1; land<numberOfLand;land++)
 	{
-		memset(visit,false,sizeof(visit));
+		fill(&visit[0][0], &visit[MAX-1][MAX] ,0);
 		result = min(result,BFS(land));
 	}
 	cout << result;
-
-
-
 }
 
 int main()
