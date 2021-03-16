@@ -20,6 +20,7 @@ bool leftCheck(int x,int y)
 }
 
 
+
 bool rightCheck(int x,int y)
 {
 	if(x != N-1 && graph[y][x+1] == 0)
