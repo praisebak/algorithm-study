@@ -21,7 +21,7 @@ int segmentTreeInit(int start,int end,int node)
 void treeInorder(int idx)
 {
 	if(tree[idx] == -1)
-	{                                                     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	{                                                     
 		return;
 	}
 	cout << tree[idx] << "\n";
