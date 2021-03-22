@@ -8,55 +8,37 @@ vector<int> graph;
 void init()
 {
 	cin >> N >> K;
-	for(int i=0;i<=N;i++)
+	for(int i=1;i<=N;i++)
 	{
 		graph.push_back(i);
 	}
-	for(int i=1;i<=N;i++)
-	{
-		if(i == N)
-		{
-			graph[i]=1;
-		}
-		else
-		{
-
-			graph[i]=i+1;
-		}
-	}
-
-	
 }
 
 void solve()
 {
-	int curV = 1;
-	while(graph.size() != 0)
+	int curV = -1;
+	int maxN = N;
+	cout << "<";
+	for(int i=0;i<N;i++)
 	{
-		for(int i=0;i<K;i++)
-		{
-			curV = graph[curV];
-		}
+		curV = (curV + K) % maxN;
+		cout << graph[curV];
 
-		cout << "출력1\n";
-		for(int i=1;i<graph.size();i++)
+		graph.erase(graph.begin() + curV);
+		curV--,maxN--;
+		if(i+1 != N)
 		{
-			cout << graph[i] << "\n";
+			cout << ", ";
 		}
-		cout << "현재 : " << curV << "\n";
-		graph.erase(graph.begin()+curV);
-		break; 
 	}
+	cout << ">";
 
-	cout << "출력\n";
-	for(int i=1;i<graph.size();i++)
-		{
-			cout << graph[i] << "\n";
-		}
 }
 
 int main()
-{
+{ 
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
 	init();
 	solve();
 
