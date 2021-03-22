@@ -1,58 +1,64 @@
 #include <iostream>
 #include <vector>
 using namespace std;
-
+int const MAX = 100001;
 int N,K;
 vector<int> graph;
+int answer[MAX];
 
 void init()
 {
 	cin >> N >> K;
 	for(int i=0;i<=N;i++)
 	{
-		graph.push_back(i);
+
+		graph.push_back(i+1);
+		if(i == N)
+		{
+			graph[N] = 1;
+		}
 	}
 	for(int i=1;i<=N;i++)
 	{
-		if(i == N)
-		{
-			graph[i]=1;
-		}
-		else
-		{
-
-			graph[i]=i+1;
-		}
+		cout << graph[i] << "\n";
 	}
-
 	
 }
+//2 3 4 5 6 7 1
 
 void solve()
 {
+
 	int curV = 1;
-	while(graph.size() != 0)
+	int preV = 1;
+	int count = 0;
+	cout << "<\n";
+	while(count != N)
 	{
 		for(int i=0;i<K;i++)
 		{
+			if(count == 0)
+			{
+				i++;
+			}
+			
+			preV = curV;
 			curV = graph[curV];
+			cout << "curV : " << curV << endl;		
 		}
 
-		cout << "출력1\n";
-		for(int i=1;i<graph.size();i++)
-		{
-			cout << graph[i] << "\n";
-		}
-		cout << "현재 : " << curV << "\n";
-		graph.erase(graph.begin()+curV);
-		break; 
+		cout << "* " << curV << "\n";
+		//3
+		int backup = curV;
+		//4
+		curV = graph[curV];
+		graph[preV] = curV;
+		graph.erase(graph.begin() + backup+1);
+		cout << preV << endl << endl;
+		
+		count++;
 	}
-
-	cout << "출력\n";
-	for(int i=1;i<graph.size();i++)
-		{
-			cout << graph[i] << "\n";
-		}
+	cout << ">";
 }
 
 int main()
