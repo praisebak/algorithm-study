@@ -1,36 +1,53 @@
 #include <iostream>
-#include <stack>
 using namespace std;
 
-void solve()
+int init()
 {
-	stack<int> s;
-	int dec;
-	int result = 0;
-	cin >> dec;
+	int num;
+	cin >> num;
+	if(num == 0)
+	{
+		cout << 0;
+	}
 
-	while(dec != 0)
+
+	return num;
+}
+
+void solve(int num)
+{
+
+	if(num == 0)
 	{
-		if(dec % -2 == 0)
-		{
-			s.push(dec % -2);
-			dec /= -2;
-		}
-		else
-		{
-			s.push(1);
-			dec = (dec-1) / -2;
-		}
+		return;
 	}
-	while(s.size() != 0)
+
+	if(num % -2 == 0)
 	{
-		cout << s.top();
-		s.pop();
+		solve(num / -2);
+		cout << 0;
 	}
+	else
+	{
+		solve((num-1) / -2);
+		cout << 1;
+	}
+
+
+	
+
 }
 
 int main()
 {
-	solve();
+
+	solve(init());
+
+
 
 }
+
+
+
+
+
