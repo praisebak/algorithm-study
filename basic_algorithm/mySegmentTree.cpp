@@ -1,44 +1,64 @@
 #include <iostream>
+const int MAX = 10001;
+int N;
+int arr[MAX];
+int tree[MAX];
 using namespace std;
 
-const int N = 10;
+void init()
+{
+	cin >> N;
+	for(int i=0;i<N;i++)
+	{
+		cin >> arr[i];
+	}
+}
 
-int testArr[] = {3,2,1,4,5,6,9,8,7,10};
-int tree[4 * N];
-
-int segmentTreeInit(int start,int end,int node)
+int initTree(int start,int end,int node)
 {
 	if(start == end)
 	{
-		return tree[node] = testArr[start];
+		return tree[node] = arr[start];
 	}
-	int mid = (start + end) / 2;
-	//왼쪽 + 오른쪽
-	return tree[node] = segmentTreeInit(start,mid,node * 2) + segmentTreeInit(mid+1,end,node*2 +1);
+	int mid = (start + end)/2;
+	return tree[node] = initTree(start,mid,node*2) + initTree(mid+1,end,node*2+1);
+
 }
 
-
-void treeInorder(int idx)
+void sum(int start, int end, int node, int left,int right)
 {
-	if(tree[idx] == -1)
-	{                                                     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	if(left > end || right < start)
+	{
+		return 0;
+	}
+	if(left <= start && end <= right)
+	{
+		return tree[node];
+	}
+	sum(start,mid,node * 2,left,right) + sum(mid+1,end,node*2 + 1,left,right);
+}
+
+void updateTree(int start,int end,int node,int idx,int changeVal)
+{
+	if(idx < start || idx > end)
+	{
 		return;
 	}
-	cout << tree[idx] << "\n";
+	tree[node] += changeVal;
+	if(start == end)
+	{
+		return;
+	}
+	int mid = (start + end)/2;
+	update(start,mid,node * 2,idx,changeVal);
+	update(mid+1,end,node * 2 + 1,idx,changeVal);
 
-	treeInorder(idx*2);
-	treeInorder(idx*2+1);
+
+
 }
-
 
 int main()
 {
-	fill_n(tree,4 * N, -1);
-	segmentTreeInit(1,N-1,1);
-
-	for(int i=0;i<N;i++)
-	{
-		cout << tree[i] << " ";
-	}
-	treeInorder(1);
+	init();
+	initTree(0,N-1,1);
 }
