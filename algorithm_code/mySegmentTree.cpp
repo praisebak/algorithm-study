@@ -40,8 +40,13 @@ void sum(int start, int end, int node, int left,int right)
 
 void updateTree(int start,int end,int node,int idx,int changeVal)
 {
+<<<<<<< HEAD:basic_algorithm/mySegmentTree.cpp
 	if(idx < start || idx > end)
 	{
+=======
+	if(tree[idx] == -1)
+	{                                                     
+>>>>>>> f8210aa42ca46c45265f7c76884a4fb866301fa2:algorithm_code/mySegmentTree.cpp
 		return;
 	}
 	tree[node] += changeVal;
