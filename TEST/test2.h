@@ -1,1 +1,0 @@
-#define NOFILE 16
