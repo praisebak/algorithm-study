@@ -14,43 +14,53 @@ int minusNum[numMax]; // think as just * -1
 void binSearch(int N,int obj)
 {
 	int i=0,j,mid;
-	j = obj;
+	j = N;
 	while(i <= j)
 	{
 		mid = (i + j)/2;
-		if(mid == obj)
+		if(num[mid] == obj)
 		{
-			cout << "\nobj 발견 : " << obj;
 			if(obj < 0)
 			{
-				minusNum[obj * -1] += 1;
+				cout << minusNum[obj * -1];
 			}
 			else
 			{
-				plusNum[obj] += 1;
+				cout << plusNum[obj];
 			}
 			return;		
 		}
-		else if(mid > obj)
+		else if(num[mid] > obj)
+		{
+			j = mid -1;
+		}
+		else if(num[mid] < obj)
 		{
 			i = mid + 1;
 		}
-		else if(mid < obj)
-		{
-			j = mid - 1;
-		}
 
 	}
-	cout << "cant found : " << obj << "\n";
+	cout << 0;
 }
 
 
 void solve()
 {
 	int N,M;
+	cin >> N;
+	fill_n(plusNum,numMax,0);
+	fill_n(minusNum,numMax,0);
 	for(int i=0;i<N;i++)
 	{
 		cin >> num[i];
+		if(num[i] < 0)
+		{
+			minusNum[num[i] * -1] += 1;
+		}
+		else
+		{
+			plusNum[num[i]] += 1;
+		}
 	}
 	cin >> M;
 	for(int i=0;i<M;i++)
@@ -58,22 +68,19 @@ void solve()
 		cin >> marking[i];
 		sortedMark[i] = marking[i];
 	}
-	fill_n(plusNum,numMax,0);
-	fill_n(minusNum,numMax,0);
+	
 	sort(num,num+N);
-	cout << "sortedMark :\n";
 	for(int i=0;i<M;i++)
 	{
-		cout << sortedMark[i] << " ";
+		if(i != 0)
+		{
+			cout << " ";
+		}
+		binSearch(N,marking[i]);
+		
 	}
-	sort(sortedMark,sortedMark+M);
-	cout << "\n";	
-	for(int i=0;i<M;i++)
-	{
-		cout << sortedMark[i] << " try to find " << endl;
-		binSearch(N,sortedMark[i]);
-	}
-	cout << "값 출력)\n";
+
+	/*
 	for(int i=0;i<M;i++)
 	{
 		if(marking[i] < 0)
@@ -88,9 +95,8 @@ void solve()
 		{
 			cout << " ";
 		}
-
 	}		
-	cout << "\n";
+	*/
 	
 
 }
