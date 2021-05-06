@@ -3,7 +3,7 @@
 #include <vector>
 using namespace std;
 const int MAX = 1001;
-
+vector<int> graph;
 
 bool visit[MAX];
 
