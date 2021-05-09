@@ -1,5 +1,5 @@
 #include <iostream>
-#include <string> 
+#include <string>
 using namespace std;
 const int MAX = 64;
 int input[MAX][MAX];
