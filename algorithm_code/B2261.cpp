@@ -1,32 +1,120 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <cmath>
 using namespace std;
 const int MAX = 100000;
-
+const int INF = 987654321;
 int N;
-double minResult = 987654321;
-
 vector <pair<int,int>> v;
 
-double getMinDistanceInRange(int start,int end)
-{
 
+int getCalDistance(int aIdx,int bIdx)
+{
+	int ax = v.at(aIdx).first;
+	int ay = v.at(aIdx).second;
+	int bx = v.at(bIdx).first;
+	int by = v.at(bIdx).second;
+	return pow(bx - ax,2) + pow(by-ay,2);
+}
+
+int getMinDistanceInRange(int start,int end)
+{
+	int result = INF;
+	for(int i=start;i<=end;i++)
+	{
+		for(int j=i+1;j<=end;j++)
+		{
+			if(i!=j)
+			{
+				result = min(result,getCalDistance(i,j));
+			}
+		}
+	}
+	return result;
+}
+
+int dist(pair<int, int> p1, pair<int, int> p2) {
+	return pow(p1.first - p2.first, 2) + pow(p1.second - p2.second, 2);
 }
 
 
-void binCal(int start,int end)
-{	
-	int result = 0;
-	if(start >= end)
+int getIdxFromDLeft(int d,int mid)
+{
+	int midX = v.at(mid).first -d;
+	for(int i=0;i<v.size();i++)
 	{
-		return;
+		if(v.at(i).first > midX)
+		{
+			return i;
+		}
 	}
-	int mid= (start + end)/2;
+	return -1;
 
-	binCal(start,mid);
-	binCal(mid+1,end);
+}
 
+int getIdxFromDRight(int d,int mid)
+{
+	int midX = v.at(mid).first +d;
+	for(int i=v.size()-1;i>=0;i--)
+	{
+		if(v.at(i).first < midX)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
+
+int binCal(int start,int end)
+{
+	int result = INF;
+	if(end - start + 1 <= 3)
+	{
+		for (int i=start; i<end; i++)
+		{
+	    	for (int j=i+1; j<=end; j++)
+	    	{
+	    		result = min(result,dist(v[i], v[j]));
+	      	}
+	    }
+	}
+	else
+	{
+		int mid= (start + end)/2;
+		result = min(binCal(start,mid-1),binCal(mid+1,end));
+		vector<pair<int, int>> tmp;
+   		tmp.push_back({v[mid].second, v[mid].first});
+
+   		for (int i=mid-1; i>=start; i--) {
+	    	if (dist({v[mid].first, 0}, {v[i].first, 0})  >= result)
+	    	{
+	    		break;
+	    	}
+	    	tmp.push_back({v[i].second, v[i].first});// y축 순으로 정렬
+    	}
+
+    	for (int i=mid+1; i<=end; i++) {
+	    	if (dist({v[mid].first, 0}, {v[i].first, 0})  >= result)
+	    	{
+	    		break;
+	    	}
+	    	tmp.push_back({v[i].second, v[i].first});// y축 순으로 정렬
+    	}
+    	sort(tmp.begin(), tmp.end());// y축 정렬
+
+    	for (int i=0; i<tmp.size()-1; i++) {
+      		for (int j=i+1; j<tmp.size(); j++) {
+       			if (pow(tmp[i].first - tmp[j].first, 2) >= result)
+       			{
+       				break;
+       			}
+        		result = min(result, dist(tmp[i], tmp[j]));
+        	}
+    	}
+	}
+	return result;
 }
 
 
@@ -42,9 +130,7 @@ void solve()
 		v.push_back(pair<int,int>(x,y));
 	}
 	sort(v.begin(),v.end());
-	v.erase(unique(v.begin(),v.end()),v.end());
-	binCal(0,v.size()-1);
-
+	cout << binCal(0,N-1);
 }
 
 int main()

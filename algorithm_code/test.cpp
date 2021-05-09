@@ -1,5 +1,4 @@
 #include <stdio.h>
-<<<<<<< HEAD
 int main()
 {
 	unsigned int address = 0xFFFFFFFF;
@@ -13,7 +12,6 @@ int main()
 
 }
 
-=======
 #include <math.h>
 
 void hanoi(int n, int from, int by, int to) {
@@ -31,7 +29,7 @@ int main() {
 	int K, A, B;
 
 	scanf("%d", &N);
-	
+
 	K = pow(2, N) - 1;
 	printf("%d\n", K);
 
@@ -39,4 +37,3 @@ int main() {
 
 	return 0;
 }
->>>>>>> e69e709efa1a20f6f43a052254af85f783cba7e6
