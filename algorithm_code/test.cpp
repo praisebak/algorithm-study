@@ -1,39 +1,35 @@
-#include <stdio.h>
-int main()
-{
-	unsigned int address = 0xFFFFFFFF;
-	unsigned int SEG_MASK = 0xF0000000;
-	unsigned int OFFSET_MASK = 0x0FFFFFFF;
-	unsigned int shift = 28;
-	unsigned int SEG = (address & SEG_MASK) >> shift;
-	unsigned int OFFSET = address & OFFSET_MASK;
+#include <cstdio>
+#include <vector>
+#include <utility>
 
-	printf("SEG : %.8x OFFSET : %.8x",SEG,OFFSET );
-
+using namespace std;
+bool sortbysec(const pair<int,int> &a, const pair<int,int> &b) {
+    return (a.second < b.second);
 }
-
-#include <math.h>
-
-void hanoi(int n, int from, int by, int to) {
-	if (n == 1)
-		printf("%d %d\n", from, to);
-	else {
-		hanoi(n - 1, from, to, by);
-		printf("%d %d\n", from, to);
-		hanoi(n - 1, by, from, to);
-	}
-}
-
 int main() {
-	int N;
-	int K, A, B;
 
-	scanf("%d", &N);
+    int N, i, n1, n2, min, cnt = 0;
 
-	K = pow(2, N) - 1;
-	printf("%d\n", K);
+    scanf("%d", &N);
+    vector <pair <int, int> > v;
 
-	hanoi(N, 1, 2, 3);
+    for (i = 0; i < N; i++) {
+        scanf("%d %d", &n1, &n2);
+        v.push_back(make_pair(n1, n2));
+    }
+    sort(v.begin(), v.end());
+    sort(v.begin(), v.end(), sortbysec);
 
-	return 0;
+    min = v[0].second;
+    cnt++;
+
+    for (i = 1; i < N; i++) {
+        if (v[i].first >= min) {
+            min = v[i].second;
+            cnt++;
+        }
+    }
+
+    printf("%d\n", cnt);
+    return 0;
 }

@@ -55,7 +55,7 @@ void isntGreedy()
 			onesUp = true;
 			curX++;
 			curY--;
-		}
+			}
 		//아래로 한칸만 가능
 		else
 		{
