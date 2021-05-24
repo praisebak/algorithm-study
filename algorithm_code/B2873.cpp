@@ -1,13 +1,38 @@
 #include <iostream>
+<<<<<<< HEAD
 #include <string>
 #include <algorithm> 
+=======
+>>>>>>> 44f1baa2ac0e841c042475a8b35f700ee36683c2
 using namespace std;
+int row,cal;
+const int MAX = 1001;
+int arr[MAX][MAX];
+int N;
+pair<int,int> minHappyPair = {0,0};
+	
+void setMinHappyPair()
+{
+	//짝수라는 말은 적어도 row,cal >= 2
+	minHappyPair = make_pair(1,1);
+	int minVal = arr[1][1];
 
+<<<<<<< HEAD
 const int INF = 987654321;
 const int MAX = 1000;
 
+=======
+	for(int i=4;i<N;i+=2)
+	{
+		for(int j=1;j<N;j+=2)
+		{
+>>>>>>> 44f1baa2ac0e841c042475a8b35f700ee36683c2
 
-int row,cal;
+		}
+	}
+	//짝수 홀수만 봐야함
+	
+}
 
 
 int arr[MAX][MAX];
@@ -85,6 +110,7 @@ void findMinHappy()
 void solve()
 {
 	cin >> row >> cal;
+	fill(&arr[0],&arr[0])
 	
 	//세로가 홀수
 	if(row % 2 != 0)
@@ -130,12 +156,19 @@ void solve()
 			}
 		}
 	}
+<<<<<<< HEAD
 	//둘다 짝수인 레후
 	//포기할 한 점을 찾아야함
 	else if(!(row%2) && !(cal%2))
 	{
 		findMinHappy();
 
+=======
+	//둘다 짝수인 경우
+	else
+	{
+		setMinHappyPair();
+>>>>>>> 44f1baa2ac0e841c042475a8b35f700ee36683c2
 	}
 
 	cout << result;
