@@ -1,39 +1,29 @@
 #include <stdio.h>
-int main()
-{
-	unsigned int address = 0xFFFFFFFF;
-	unsigned int SEG_MASK = 0xF0000000;
-	unsigned int OFFSET_MASK = 0x0FFFFFFF;
-	unsigned int shift = 28;
-	unsigned int SEG = (address & SEG_MASK) >> shift;
-	unsigned int OFFSET = address & OFFSET_MASK;
-
-	printf("SEG : %.8x OFFSET : %.8x",SEG,OFFSET );
-
-}
-
 #include <math.h>
 
-void hanoi(int n, int from, int by, int to) {
-	if (n == 1)
-		printf("%d %d\n", from, to);
-	else {
-		hanoi(n - 1, from, to, by);
-		printf("%d %d\n", from, to);
-		hanoi(n - 1, by, from, to);
-	}
+
+int power(int a, int b)
+{
+
+     return pow(a, b);
+
+}
+int main()
+{
+    int a, b, sum = 0, i;
+
+    printf("n 과 k를 입력하시오. ");
+    scanf(" %d %d", &a, &b);
+
+    for (i = 1; i <= a; i++)
+    {
+        sum = sum + power(a, b);
+    }
+
+
+    printf("1~n까지 모두 k승을 하여 더한 값 = %d", sum);
+
+    return 0;
 }
 
-int main() {
-	int N;
-	int K, A, B;
 
-	scanf("%d", &N);
-
-	K = pow(2, N) - 1;
-	printf("%d\n", K);
-
-	hanoi(N, 1, 2, 3);
-
-	return 0;
-}
