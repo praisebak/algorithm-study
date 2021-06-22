@@ -1,34 +1,3 @@
-<<<<<<< HEAD
-#include <stdio.h>
-#include <math.h>
-
-
-int power(int a, int b)
-{
-
-     return pow(a, b);
-
-}
-int main()
-{
-    int a, b, sum = 0, i;
-
-    printf("n 과 k를 입력하시오. ");
-    scanf(" %d %d", &a, &b);
-
-    for (i = 1; i <= a; i++)
-    {
-        sum = sum + power(a, b);
-    }
-
-
-    printf("1~n까지 모두 k승을 하여 더한 값 = %d", sum);
-
-    return 0;
-}
-
-
-=======
 #include <iostream>
 
 #include <string>
@@ -48,7 +17,6 @@ const int INF = 987654321;
 int arr[MAX][MAX];
 
 string result;
-
  
 
 int main(void)
@@ -198,7 +166,6 @@ int main(void)
                  for (int x = newC; x < C - 1; x++)
 
                          if (x % 2 == 0)
-
                                  result += "RD";
 
                          else
@@ -239,7 +206,6 @@ int main(void)
 
         }
 
-        cout << result << "\n";
 
         return 0;
 
@@ -247,4 +213,3 @@ int main(void)
 
 
 
->>>>>>> 4543a8b4ed7a6c9a22eeb260eb4c3f7fd8e56040
