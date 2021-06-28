@@ -10,7 +10,8 @@ pair<int,int> direction[4]={
     make_pair(1,0)
 };
 
-bool visited[10][10][10][10];
+bool redVisit[10][10];
+bool blueVisit[10][10];
 int countCheck[10][10][10][10];
 char arr[10][10];
 int N,M;
@@ -27,9 +28,25 @@ bool isHasAnswer(int r,int c);
 bool isHasBlocked(int r,int c);
 
 
-int getDistance(int beforeR,int afterR,int beforeC,int afterC)
+void showDirection(int mode)
 {
-    return abs(afterR - beforeR) + abs(afterC - beforeC);
+    if(mode == 0)
+    {
+        cout << "left\n";
+    }
+    else if(mode == 1)
+    {
+        cout << "right\n";
+    }
+    else if(mode == 2)
+    {
+        cout << "up\n";
+
+    }
+    else
+    {
+        cout << "down\n";
+    }
 }
 
 void solve()
@@ -37,7 +54,6 @@ void solve()
     
     int count = 0;
     int dir = 0;
-    int ans = 987654321;
     int redRow,redCal;
     int blueRow,blueCal;
     int dirRow,dirCal;
@@ -54,7 +70,7 @@ void solve()
     //동시에 들어가는 케이스
     //개수가 하나 더 나오는 케이스
     //군휴학 병무청 신청
-    while(count <= 10)
+    while(1)
     {
         if(redQue.empty())
         {
@@ -75,98 +91,94 @@ void solve()
 
         for(dir=0;dir<4;dir++)
         {
+            redRow = tmpRRow;
+            redCal = tmpRCal;
+            blueRow = tmpBRow;
+            blueCal = tmpBCal;
             dirRow = direction[dir].first;
             dirCal = direction[dir].second;
-            redRow = tmpRRow + dirRow;
-            redCal = tmpRCal + dirCal;
-            blueRow = tmpBRow + dirRow;
-            blueCal = tmpBCal + dirCal;
             hasBlueMeetAnswer = false;
             hasRedMeetAnswer = false;
 
-            while(1)
+            if(isHasAnswer(blueRow + dirRow,blueCal + dirCal))
             {
-                if(isHasBlocked(blueRow,blueCal))
-                {
-                    break;
-                }
-                if(isHasAnswer(blueRow,blueCal))
-                {
-                    hasBlueMeetAnswer = true;
-                    break;
-                }
-                blueRow += dirRow;
-                blueCal += dirCal;
+                hasBlueMeetAnswer = true;
             }
-            blueRow -= dirRow;
-            blueCal -= dirCal;
-
-            while(1)
+            else
             {
-                if(isHasBlocked(redRow,redCal))
+                //길 있으면
+                if(isHasPath(blueRow + dirRow,blueCal + dirCal))
                 {
-                   break;
+                    //막힐때까지 그방향으로 이동
+                    while(!isHasBlocked(blueRow+dirRow,blueCal+dirCal))
+                    {
+                        //그 방향으로 이동했는데 구멍으로 빠졌냐
+                        if(isHasAnswer(blueRow + dirRow,blueCal + dirCal))
+                        {
+                            hasBlueMeetAnswer = true;
+                            blueRow += dirRow;
+                            blueCal += dirCal;
+                            break;
+                        }
+                        blueRow += dirRow;
+                        blueCal += dirCal;
+                    }   
                 }
-                if(isHasAnswer(redRow,redCal))
-                {
-                    hasRedMeetAnswer = true;
-                    break;
-                }
-                redRow += dirRow;
-                redCal += dirCal;
             }
-            redRow -= dirRow;
-            redCal -= dirCal;
 
-            if(redRow == blueRow && redCal == blueCal)
+            //빨간색이 구멍에 빠졌는가
+            if(isHasAnswer(redRow + dirRow,redCal + dirCal))
             {
-                //cout << "same place\n";
-                //cout << redRow << "," << redCal  << "," << blueRow << "," << blueCal << endl;
-                int redDistance = getDistance(tmpRRow,redRow,tmpRCal,redCal);
-                int blueDistance = getDistance(tmpBRow,blueRow,tmpBCal,blueCal);
-                if(redDistance > blueDistance)
+                hasRedMeetAnswer = true;
+            }
+            else
+            {
+                if(isHasPath(redRow + dirRow,redCal + dirCal))
                 {
-                    redRow -= dirRow;
-                    redCal -= dirCal;
+                    //막힐때까지 그방향으로 이동
+                    while(!isHasBlocked(redRow+dirRow,redCal+dirCal))
+                    {
+                        //그 방향으로 이동했는데 구멍으로 빠졌냐
+                        if(isHasAnswer(redRow + dirRow,redCal + dirCal))
+                        {
+                            hasRedMeetAnswer = true;
+                            redRow += dirRow;
+                            redCal += dirCal;
+                            break;
+                        }
+                        redRow += dirRow;
+                        redCal += dirCal;
+                    }
+
+
+                    if(!isVisited(blueRow,blueCal,redRow,redCal))
+                    {
+                        blueQue.push(make_pair(blueRow,blueCal));
+                        redQue.push(make_pair(redRow,redCal));
+                        setVisit(blueRow,blueCal,redRow,redCal,count+1);
+                        cout << "visit point : " << blueRow << "," << blueCal << "," << redRow << "," << redCal << " " << count+1; 
+                        showDirection(dir);
+                    }
+
                 }
-                else
-                {
-                    blueRow -= dirRow;
-                    blueCal -= dirCal;
-                }
-                //cout << redRow << "," << redCal << "," << blueRow << "," << blueCal << endl << endl;
             }
 
             if(hasBlueMeetAnswer)
             {
-                continue;
+                
             }
             else
             {
-                if(hasRedMeetAnswer)
-                {
-                    ans = min(ans,count+1);
-                }
+
             }
 
-            if(!isVisited(blueRow,blueCal,redRow,redCal))
-            {
-                blueQue.push(make_pair(blueRow,blueCal));
-                redQue.push(make_pair(redRow,redCal));
-                setVisit(blueRow,blueCal,redRow,redCal,count+1);
-            }
+
+
 
         }   
     }
-    if(ans > 10 || ans == 987654321)
-    {
-        cout << -1;
-    }
-    else
-    {
-        cout << ans;
-    }
 
+    cout << -1;
 }
 
 int main()
@@ -186,13 +198,8 @@ void inputFromIO()
     {
         for(int j=0;j<10;j++)
         {
-            for(int k=0;i<10;i++)
-            {
-                for(int l=0;l<10;l++)
-                {
-                    visited[i][j][k][l] = false;
-                }
-            }
+            redVisit[i][j] = false;
+            blueVisit[i][j]= false;
         }
     }
 
@@ -225,14 +232,19 @@ void inputFromIO()
 
 void setVisit(int blueR,int blueC,int redR,int redC,int count)
 {
-    visited[redR][redC][blueR][blueC] = true ;
+    redVisit[redR][redC] = true;
+    blueVisit[blueR][blueC]= true;
     countCheck[redR][redC][blueR][blueC] = count;
     
 }
 
 bool isVisited(int blueR,int blueC,int redR,int redC)
 {
-    return visited[redR][redC][blueR][blueC];
+    if(blueVisit[blueR][blueC] && redVisit[redR][redC])
+    {
+        return true;
+    }
+    return false;
 }
 
 bool isHasPath(int r,int c)
