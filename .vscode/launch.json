@@ -5,6 +5,20 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "java",
+            "name": "Launch b14899",
+            "request": "launch",
+            "mainClass": "b14899",
+            "projectName": "algorithm_85d9a201"
+        },
+        {
+            "type": "java",
+            "name": "Launch b14899",
+            "request": "launch",
+            "mainClass": "algorithm_code.java.b14899",
+            "projectName": "algorithm_85d9a201"
+        },
+        {
             "name": "g++.exe - 활성 파일 빌드 및 디버그",
             "type": "cppdbg",
             "request": "launch",
