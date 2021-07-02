@@ -1,4 +1,4 @@
-class Solution {
+class p77485 {
     static int[][] getInput(int rows,int columns)
     {
         int count = 1;
