@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Iterator;
 
@@ -36,11 +37,10 @@ class Pair
 class b20055
 {
     static int N,K;
-    static Deque<Pair> upBelt;
-    static Deque<Integer> downBelt;
-
+    static Deque<Pair> upBelt = new ArrayDeque<>();
+    static Deque<Integer> downBelt = new ArrayDeque<>();
     static Scanner sc;
-
+    static int countK = 0;
 
     static void inputFromIO()
     {
@@ -53,7 +53,7 @@ class b20055
         }
         for(int i=0;i<N;i++)
         {
-            downBelt.add(sc.nextInt());
+            downBelt.addFirst(sc.nextInt());
         }
     }
     //회전할때는 내리는 위치에 있는애만 내리고
@@ -65,6 +65,11 @@ class b20055
         int upLastVal = upLast.getKey();
         downBelt.addLast(upLastVal);
         upBelt.addFirst(new Pair(downFirst,0));
+        Pair afterUpLast = upBelt.getLast();
+        if(afterUpLast.value == 1)
+        {
+            afterUpLast.value = 0;
+        }
     }
 
     static void robotMove()
@@ -76,53 +81,71 @@ class b20055
         for(; iter.hasNext();)
         {
             Pair curBelt = iter.next();
-            if(prevRobot == 0 && curBelt.getKey() != 0 && curBelt.getValue() == 1)
+            if(prevRobot == 0 && prev.getKey() > 0 && curBelt.getValue() == 1) 
             {
-                curBelt.setKey(curBelt.getKey()-1);
+                prev.setKey(prev.getKey()-1);
                 curBelt.setValue(0); 
                 prev.setValue(1);
+                if(prev.getKey() == 0)
+                {
+                    countK++;
+                }
             }
             prev = curBelt;
             prevRobot = curBelt.getValue();
+
+        }
+        prevRobot = upBelt.getLast().value;
+        if(prevRobot == 1)
+        {
+            upBelt.getLast().value = 0;
         }
     }
 
     static void robotAdd()
     {
-    }
-
-    static void checkCount()
-    {
-        
+        Pair first = upBelt.getFirst();
+        if(first.key >= 1)
+        {
+            first.setValue(1);
+            first.key--;
+            if(first.key== 0)
+            {
+                countK++;
+            }
+        }
     }
 
     static void solve()
     {  
-        int countK = 0;
         int level = 0;
         while(countK < K)
         {
+            //System.out.println("***********\nbefore");
+            //printAll();
             rotation();
+            //System.out.println("\nafter");
+            //printAll();
             robotMove();
+            //System.out.println("\nafter robot move");
+            //printAll();
             robotAdd();
-            checkCount();
+            //System.out.println("\nafter robot add");
+            //printAll();
             level++;
+            //System.out.println();
+            //sc.next();
+            //countK = printAll();
+
         }
         System.out.println(level);
     }
 
-    static void printAll()
-    {
-        Iterator<Pair> iter = upBelt.iterator();
-        
-
-    }
-
+    
 
     public static void main(String args[])
     {
         inputFromIO();
-        printAll();
         solve();
     }
 }
