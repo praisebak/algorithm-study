@@ -81,6 +81,7 @@ class b20055
         for(; iter.hasNext();)
         {
             Pair curBelt = iter.next();
+            
             if(prevRobot == 0 && prev.getKey() > 0 && curBelt.getValue() == 1) 
             {
                 prev.setKey(prev.getKey()-1);
