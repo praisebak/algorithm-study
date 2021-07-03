@@ -6,10 +6,17 @@
     "configurations": [
         {
             "type": "java",
+<<<<<<< HEAD
             "name": "Launch p12951",
             "request": "launch",
             "mainClass": "p12951",
             "projectName": "algorithm_code_5ffb9d8b"
+=======
+            "name": "Launch b20055",
+            "request": "launch",
+            "mainClass": "b20055",
+            "projectName": "algorithm_code_836cc8c6"
+>>>>>>> 4ab2ce232ae40dd96c1f05989f88d4e5dc4a1075
         },
         {
             "name": "cpp.exe - 활성 파일 빌드 및 디버그",
