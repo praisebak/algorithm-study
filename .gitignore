@@ -3,3 +3,6 @@ algorithm_code/input.txt
 test.cpp
 test.exe
 *.exe
+.vscode/
+/.vscode
+.vscode/*
