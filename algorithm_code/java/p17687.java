@@ -25,7 +25,6 @@ class Solution {
     //0, 1, 1, 0, 1, 1, 1, 0, 0
     //digit,number,people,count
     public String solution(int n, int t, int m, int p) T
-                    if
         String nDigitString;
         StringBuilder answerStrBuild = new StringBuilder();
         int curT = 1;
