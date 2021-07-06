@@ -21,6 +21,4 @@ class Solution
         return (int)Math.pow(answer,2);
     }
     
-    
-    
 }
