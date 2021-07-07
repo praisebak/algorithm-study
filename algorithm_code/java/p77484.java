@@ -17,8 +17,6 @@ class p77484 {
         int[] answer = new int[2];
         int maxWinRate = 7;
         int minWinRate = 7;
-        int zeroCount = 0;
-        
         for(int i=0;i<6;i++)
         {
             if(lottos[i] == 0)

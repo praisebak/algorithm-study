@@ -1,4 +1,4 @@
-class Solution {
+class p12393 {
     public String solution(String s) 
     {
         String[] strArray = s.split(" ");
@@ -9,7 +9,7 @@ class Solution {
         {
             tmp = Integer.parseInt(strArray[i]);
             min = Math.min(min,tmp);
-            max - Math.max(max,tmp);
+            max = Math.max(max,tmp);
         }
         String answer = Integer.toString(min) + " " + Integer.toString(max);
         return answer;

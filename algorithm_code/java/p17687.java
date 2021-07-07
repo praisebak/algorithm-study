@@ -1,4 +1,4 @@
-class Solution {
+class p17687 {
 
     public String getNDigitNum(int n,int digit)
     {
@@ -24,7 +24,9 @@ class Solution {
     }
     //0, 1, 1, 0, 1, 1, 1, 0, 0
     //digit,number,people,count
-    public String solution(int n, int t, int m, int p) T
+    public String solution(int n, int t, int m, int p)
+    {
+
         String nDigitString;
         StringBuilder answerStrBuild = new StringBuilder();
         int curT = 1;

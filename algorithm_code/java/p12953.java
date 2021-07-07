@@ -1,4 +1,4 @@
-class Solution {
+class p12953 {
 
 
     static int gcd(int numA,int numB)
@@ -15,7 +15,6 @@ class Solution {
         return result;
     }
     static int lcd(int numA, int numB) {
-        int result = 0;
         int gcd = 0;
         gcd = gcd(numA,numB);
         

@@ -1,6 +1,6 @@
 import java.util.Arrays;
 
-class Solution {
+class p12945 {
     int MAX = 100000+1;
     int dp[] = new int[MAX];
     int divNum = 1234567;

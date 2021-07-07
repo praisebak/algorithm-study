@@ -1,4 +1,4 @@
-class Solution {
+class p12951 {
     public String solution(String s) 
     {
         char[] charArr = s.toCharArray();

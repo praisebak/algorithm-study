@@ -1,6 +1,6 @@
 import java.util.Arrays;
 
-class Solution {
+class p12913 {
     
     boolean visit[];
     int max = Integer.MIN_VALUE;
@@ -36,9 +36,6 @@ class Solution {
     
     int solution(int[][] land) {
         int answer = 0;
-        int tmp = 0;
-        int maxIdx = 0;
-
         visit =  new boolean[land[0].length];
         //첫번째에 어떤 cal을 선택했느냐
         

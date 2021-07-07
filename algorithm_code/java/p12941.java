@@ -1,5 +1,5 @@
 import java.util.Arrays;
-class Solution
+class p12941
 {
     public int solution(int []A, int []B)
     {

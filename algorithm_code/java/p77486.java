@@ -1,8 +1,8 @@
 import java.util.HashMap;
-import java.util.Set;
 
-class Solution{//p77486 {
-    
+class p77486
+{
+
     static int ans[];
     static HashMap<String,Integer> enrollIdxMap = new HashMap<String,Integer>();
 

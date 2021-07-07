@@ -1,4 +1,4 @@
-class Solution {
+class p12924 {
     public int solution(int n) {
 
         int answer = 0;
