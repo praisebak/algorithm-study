@@ -1,29 +1,19 @@
-
 import java.util.Arrays;
-class Solution {
-
+class p42885 {
     public int solution(int[] people, int limit) {
         int answer = 0;
-        Arrays.sort(people);
-        int cur = 0;
-        
-        for(int i=0; i< people.length;i++)
+       	Arrays.sort(people);
+        int front = 0;
+        int i = 0;
+        for(i=people.length-1;i>= front;i--)
         {
-            cur += people[i];
-            if(cur > limit)
+        	if(limit >= people[i] + people[front])
             {
-                cur = 0;
-                answer++;
-            }            
-            
-        }
-        
-        if(cur < limit)
-        {
+            	front++;
+			}
             answer++;
-        }
-
+		}
+        
         return answer;
     }
-
 }
