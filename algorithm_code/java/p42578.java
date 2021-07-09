@@ -3,24 +3,21 @@ import java.util.Map.Entry;
 public class p42578 {
     
     public static int solution(String[][] clothes) {
-        String cloth;
         String key;
-        HashMap <String,String> map = new HashMap<String,String>();
+        HashMap <String,Integer> map = new HashMap<String,Integer>();
+        
         for(int i=0;i<clothes.length;i++)
         {
-            cloth = clothes[i][0];
             key = clothes[i][1];
-            map.put(key, cloth);
+            map.put(key, map.getOrDefault(key, 0)+1);
         }
 
-        for(Entry<String,String> entry : map.entrySet())
+        int answer = 1;
+        for(Entry<String,Integer> entry : map.entrySet())
         {
-            System.out.println(entry.getKey());
-            
+            answer *= entry.getValue() + 1;
         }
-
-        int answer = 0;
-        return answer;
+        return answer - 1;
     }
 
     public static void main(String[] args)

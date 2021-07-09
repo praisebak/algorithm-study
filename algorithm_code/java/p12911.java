@@ -1,4 +1,4 @@
-class Solution
+class p12911
 {
 
     boolean isCollectOne(int n,int originCount)

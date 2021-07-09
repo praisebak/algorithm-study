@@ -1,4 +1,4 @@
-class Solution
+class p12905
 {
     public static int solution(int [][]board)
     {

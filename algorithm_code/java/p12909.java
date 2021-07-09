@@ -1,4 +1,4 @@
-class Solution {
+class p12909 {
     boolean solution(String s) {
         boolean answer = true;
         int startCount = 0;
