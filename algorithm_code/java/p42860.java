@@ -15,7 +15,6 @@ class p42860
 
     static int[] getLessCursorMove(int curIdx,char[] name,char[] result)
     {
-        int resultIdx = 0;
         int rightMove = curIdx;
         int leftMove = curIdx;
         int amountLeftMove = 0;
@@ -60,7 +59,6 @@ class p42860
         //z에서 obj로 가느냐
         int cursor = 0;
         int alphaMove = 0;
-        int cursorMoveAmount = 0;
         int move = 0;
         char[] result = new char[name.length()];
         
@@ -98,14 +96,13 @@ class p42860
         int N;
         Scanner sc = new Scanner(System.in);
         N = sc.nextInt();
-        StringBuilder sb=  new StringBuilder();
         for(int i=0;i<N;i++)
         {
             String str = sc.next();   
             System.out.println(solution(str));
             
         }
-        
+        sc.close();
     }
 
 
