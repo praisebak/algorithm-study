@@ -1,4 +1,4 @@
-class p12393 {
+class p12939 {
     public String solution(String s) 
     {
         String[] strArray = s.split(" ");
