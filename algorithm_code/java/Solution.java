@@ -1,117 +1,183 @@
+import java.sql.RowId;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Objects;
+
 
 class Pair
 {
-    int x;
-    int y;
-    Pair(int x,int y)
+    int row;
+    int cal;
+    Pair(int row,int cal)
     {
-        this.x = x;
-        this.y = y;
+        this.row = row;
+        this.cal = cal;
     }
 
+    public boolean equals(Object obj)
+    {
+        if(obj instanceof Pair)
+        {
+            Pair tmpPair = (Pair) obj;
+            return row == tmpPair.row && cal == tmpPair.cal;
+        }
+    }
+
+    public int hashCode()
+    {
+        return Objects.hash(row,cal);
+    }
 
 }
-class Solution 
+
+
+class Solution
 {
-    String[][] coordinate;
-    String[] answer;
-    ArrayList<Pair> meetList = new ArrayList<>();
-    int minX = Integer.MAX_VALUE;
-    int minY = Integer.MAX_VALUE;
-    int maxX = Integer.MIN_VALUE;
-    int maxY = Integer.MIN_VALUE;
-    
-    public String[] solution(int[][] line) 
+    boolean[][] visit;
+    Character[][] arr;
+    // 왼 오 상 하
+    // 1과 3과 1,3을 인덱스로 사용해
+    int[] dx = {-1,1,0,0};
+    int[] dy = {0,0,1,-1};
+
+
+    HashMap<Character,HashSet<Pair> > checkedPair = new HashMap<>();
+
+
+    public int solution(int m,int n,String[] board)
     {
-        answer = setCoordinate(line);
+        int answer = 0;
+        int prevAns = answer-1;
+        visit = new boolean[m][n];
+        arr = new Character[m][n];
+        initArr(board);
+
+        while(answer != prevAns)
+        {
+            prevAns = answer;
+            for(int i=0;i<m;i++)
+            {
+                for(int j=0;j<n;j++)
+                {
+                    if(!visit[i][j])
+                    {
+                        checkTwoXTwoVal(i, j);
+                        answer += dfs(i,j,0);
+                    }
+                }
+            }
+            checkByPair();
+            break;
+        }
+
+        System.out.println(checkedPair.get('R').size());
+        System.out.println(answer);
         return answer;
     }
-
-    private String[] setCoordinate(int[][] line) 
+    private void checkByPair() 
     {
-        for(int i=0;i<line.length;i++)
-        {  
-            long a = line[i][0];
-            long b = line[i][1];
-            long e = line[i][2];
-
-            for(int j=i+1;j<line.length;j++)
+        for(Character key : checkedPair.keySet())
+        {
+            for(Pair pair : checkedPair.get(key))
             {
-                long c = line[j][0];
-                long d = line[j][1];
-                long f = line[j][2];
-
-                long adbc = a * d - b * c;
-                long ecaf = e * c - a * f;
-                long bfed = b * f - e * d;
-                if(adbc == 0)
+                /*
+                if(checkTwoXTwoVal(pair,key))
                 {
-                    continue;
                 }
-                if(bfed % adbc != 0)
-                {
-                    continue;
-                }
-                
-                if(ecaf % adbc != 0)
-                {
-                    continue;
-                }
-
-           
-
-                long x = (b * f - e * d) / (a * d - b * c);
-                long y = (e * c - a * f) / (a * d - b * c);
-
-
-                Pair pair = new Pair((int)x,(int)y);
-                
-                meetList.add(pair);
-                maxY = Math.max(maxY,(int)y);
-                maxX = Math.max(maxX,(int)x);
-                minX = Math.min(minX,(int)x);
-                minY = Math.min(minY,(int)y);
-                //System.out.println("교점 : " + x + "," + y);
-                
+                */
             }
         }
 
-        this.coordinate = new String[maxY - minY+1][maxX - minX+1];
-        for(String[] iterStr : coordinate)
-        {
-            Arrays.fill(iterStr, ".");
-        }
-
-        String[] tmpAnswer = new String[maxY - minY + 1];
-        for(Pair pair : meetList)
-        {
-            pair.y = pair.y - minY;
-            pair.x = pair.x - minX;
-            coordinate[pair.y][pair.x] = "*";
-
-            Arrays.fill(tmpAnswer, "");
-
-            for(int i=coordinate.length-1;i >= 0 ;i--)
-            {
-                for(int j=0;j< coordinate[i].length;j++)
-                {
-                    tmpAnswer[tmpAnswer.length-1 - i] = tmpAnswer[tmpAnswer.length-1-i] + coordinate[i][j];
-                }
-            }
-        }
-        return tmpAnswer;
-        
-
-        
     }
 
-    public static void main(String[] args)
+    private void checkTwoXTwoVal(int curRow,int curCal) 
     {
-        Solution solu = new Solution();
-        int[][] line = {{2, -1, 4}, {-2, -1, 4}, {0, -1, 1}, {5, -8, -12}, {5, 8, 12}};
-        solu.solution(line);
+        Character key = arr[curRow][curCal];
+        Pair curPoint = new Pair(curRow,curCal);
+        Pair right = new Pair(curRow,curCal+1);
+        Pair down = new Pair(curRow+1,curCal);
+        Pair rightDown = new Pair(curRow+1,curCal+1);
+        HashSet<Pair> tmpSet = checkedPair.getOrDefault(key, new HashSet<Pair>());
+
+        if(isValidArea(right,arr[curRow][curCal]) && isValidArea(down,arr[curRow][curCal]) && isValidArea(rightDown,arr[curRow][curCal]))
+        {
+            System.out.println(curRow + "," + curCal + " 에서 발생");
+            tmpSet.add(curPoint);
+            tmpSet.add(right);
+            tmpSet.add(down);
+            tmpSet.add(rightDown);
+            checkedPair.put(key, tmpSet);
+
+        }
+    }
+
+    private boolean isValidArea(Pair direction, Character character) 
+    {
+        int row = direction.row;
+        int cal = direction.cal;
+
+
+        if(row >= arr.length || cal >= arr[0].length) 
+        {
+            return false;
+        }
+        if(cal < 0 || row < 0)
+        {
+            return false;
+        }
+        if(character != arr[row][cal])
+        {
+            return false;
+        }
+        return true;
+    }
+
+    private int dfs(int row, int cal, int depth) 
+    {
+        int tmpDepth = depth;
+        visit[row][cal] = true;
+
+        for(int i=0; i<4;i++)
+        {
+            int nextX = dx[i] + cal;
+            int nextY = dy[i] + row;
+            if(isValid(nextY,nextX) && !visit[nextY][nextX]
+            && arr[nextY][nextX] == arr[row][cal])
+            {
+                checkTwoXTwoVal(nextY, nextX);
+                tmpDepth = dfs(nextY,nextX,depth+1);
+            }
+
+        }
+        return tmpDepth;
+    }
+    private boolean isValid(int nextY, int nextX) 
+    {
+        if(nextY < 0  || nextY >= arr.length)
+        {
+            return false;
+        }
+        if(nextX < 0 || nextX >= arr[0].length)
+        {
+            return false;
+        }
+        return true;
+    }
+    private void initArr(String[] board) 
+    {
+        for(int i=0;i<board.length;i++)
+        {
+            for(int j=0;j<board[i].length();j++)
+            {
+                arr[i][j] = board[i].charAt(j);
+            }
+        }
+    }    
+    public static void main(String[] args) 
+    {
+        Solution solution = new Solution();
+        solution.solution(6,6, new String[]{"TTTANT", "RRFACC", "RRRFCC", "TRRRAA", "TTMMMF", "TMMTTJ"});
+        
     }
 }
