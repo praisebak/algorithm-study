@@ -1,49 +1,34 @@
+import java.util.Arrays;
 
-import java.util.*;
-
-
-//답지 보고 푼 문제
-//프로그래머스에는 제출하지 않았으니 다시 풀어보자
-//아이디어,내가 생각한 방법은 시간초과
-class Solution 
-{
+class Solution {
     public long solution(int n, int[] times) 
     {
+        long answer = 0;
         Arrays.sort(times);
-        long start = 0;
-        long end = Long.MAX_VALUE;
-        long sum = 0;
-        long mid = 0;
-        long answer = 0; 
+        long left = 0;
+        long right = times[times.length-1] * n;
 
-        while(start <= end)
+        while(left < right)
         {
-            mid = (start + end) / 2;
+            long mid = (left + right)/2;
+            int sum = 0;
             for(int i=0;i<times.length;i++)
             {
                 sum += mid / times[i];
-                if(sum >= n)
-                {
-                    break;
-                }
             }
-
-            if(sum >= n)
+            if(n >= sum)
             {
-                end = mid-1;
-                answer = Math.min(answer,mid);
-            }else{
-                start = mid+1;
+                answer = Math.min(answer, mid);
+                right = mid-1;
+            }
+            else
+            {
+                left = mid+1;
             }
 
 
-            
+
         }
         return answer;
-
-
-
-
-
     }
 }
