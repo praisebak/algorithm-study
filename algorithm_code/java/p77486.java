@@ -6,6 +6,7 @@ class p77486
     static int ans[];
     static HashMap<String,Integer> enrollIdxMap = new HashMap<String,Integer>();
 
+
     static boolean isDivideAble(int money)
     {
         if(money / 10 >= 1)
