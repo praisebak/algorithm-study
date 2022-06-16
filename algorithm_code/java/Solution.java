@@ -1,183 +1,119 @@
-import java.sql.RowId;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Objects;
 
+class Solution {
+    public int[] solution(String[] gems) {
+        int[] answer = new int[2];
+        int l = 0;
+        int r = 0;        
+        int curMinSize = Integer.MAX_VALUE;
 
-class Pair
-{
-    int row;
-    int cal;
-    Pair(int row,int cal)
-    {
-        this.row = row;
-        this.cal = cal;
-    }
+        HashMap<String,Integer> gemMap = new HashMap<>();
+        HashSet<String> gemSet = new HashSet<>();
 
-    public boolean equals(Object obj)
-    {
-        if(obj instanceof Pair)
+        for(String gem : gems)
         {
-            Pair tmpPair = (Pair) obj;
-            return row == tmpPair.row && cal == tmpPair.cal;
+            gemSet.add(gem);
         }
-    }
-
-    public int hashCode()
-    {
-        return Objects.hash(row,cal);
-    }
-
-}
-
-
-class Solution
-{
-    boolean[][] visit;
-    Character[][] arr;
-    // 왼 오 상 하
-    // 1과 3과 1,3을 인덱스로 사용해
-    int[] dx = {-1,1,0,0};
-    int[] dy = {0,0,1,-1};
-
-
-    HashMap<Character,HashSet<Pair> > checkedPair = new HashMap<>();
-
-
-    public int solution(int m,int n,String[] board)
-    {
-        int answer = 0;
-        int prevAns = answer-1;
-        visit = new boolean[m][n];
-        arr = new Character[m][n];
-        initArr(board);
-
-        while(answer != prevAns)
+        
+        while(true)
         {
-            prevAns = answer;
-            for(int i=0;i<m;i++)
+            if(gemSet.size() == gemMap.size())
             {
-                for(int j=0;j<n;j++)
+                System.out.println("a1");
+                int val2 = gemMap.get(gems[l]);
+                gemMap.put(gems[l],val2-1);
+                if(val2-1 == 0)
                 {
-                    if(!visit[i][j])
-                    {
-                        checkTwoXTwoVal(i, j);
-                        answer += dfs(i,j,0);
-                    }
+                    gemMap.remove(gems[l]);
+                }
+                l++;
+            }
+            //가지수가 부족할 때 r 증가
+            else if(r == gems.length)
+            {
+                break;
+            }
+            else 
+            {
+                gemMap.put(gems[r], gemMap.getOrDefault(gems[r], 0) + 1);
+                r++;
+            }
+
+             if(gemSet.size() == gemMap.size())
+            {
+                System.out.println("a2");
+                System.out.println();
+                if(curMinSize > r-l)
+                {
+                    curMinSize = r - l;
+                    answer[0] = l+1;
+                    answer[1] = r;
                 }
             }
-            checkByPair();
-            break;
         }
 
-        System.out.println(checkedPair.get('R').size());
-        System.out.println(answer);
         return answer;
     }
-    private void checkByPair() 
-    {
-        for(Character key : checkedPair.keySet())
+}
+
+/* 
+class Solution {
+    public int[] solution(String[] gems) {
+        int[] answer = new int[2];
+        int l = 0;
+        int r = 0;        
+        int curMinSize = Integer.MAX_VALUE;
+        int nonDupliJewel = 0;
+
+        HashMap<String,Integer> gemMap = new HashMap<>();
+        for(String gem : gems)
         {
-            for(Pair pair : checkedPair.get(key))
-            {
-                /*
-                if(checkTwoXTwoVal(pair,key))
-                {
-                }
-                */
-            }
+            gemMap.put(gem, 0);
         }
-
-    }
-
-    private void checkTwoXTwoVal(int curRow,int curCal) 
-    {
-        Character key = arr[curRow][curCal];
-        Pair curPoint = new Pair(curRow,curCal);
-        Pair right = new Pair(curRow,curCal+1);
-        Pair down = new Pair(curRow+1,curCal);
-        Pair rightDown = new Pair(curRow+1,curCal+1);
-        HashSet<Pair> tmpSet = checkedPair.getOrDefault(key, new HashSet<Pair>());
-
-        if(isValidArea(right,arr[curRow][curCal]) && isValidArea(down,arr[curRow][curCal]) && isValidArea(rightDown,arr[curRow][curCal]))
-        {
-            System.out.println(curRow + "," + curCal + " 에서 발생");
-            tmpSet.add(curPoint);
-            tmpSet.add(right);
-            tmpSet.add(down);
-            tmpSet.add(rightDown);
-            checkedPair.put(key, tmpSet);
-
-        }
-    }
-
-    private boolean isValidArea(Pair direction, Character character) 
-    {
-        int row = direction.row;
-        int cal = direction.cal;
-
-
-        if(row >= arr.length || cal >= arr[0].length) 
-        {
-            return false;
-        }
-        if(cal < 0 || row < 0)
-        {
-            return false;
-        }
-        if(character != arr[row][cal])
-        {
-            return false;
-        }
-        return true;
-    }
-
-    private int dfs(int row, int cal, int depth) 
-    {
-        int tmpDepth = depth;
-        visit[row][cal] = true;
-
-        for(int i=0; i<4;i++)
-        {
-            int nextX = dx[i] + cal;
-            int nextY = dy[i] + row;
-            if(isValid(nextY,nextX) && !visit[nextY][nextX]
-            && arr[nextY][nextX] == arr[row][cal])
-            {
-                checkTwoXTwoVal(nextY, nextX);
-                tmpDepth = dfs(nextY,nextX,depth+1);
-            }
-
-        }
-        return tmpDepth;
-    }
-    private boolean isValid(int nextY, int nextX) 
-    {
-        if(nextY < 0  || nextY >= arr.length)
-        {
-            return false;
-        }
-        if(nextX < 0 || nextX >= arr[0].length)
-        {
-            return false;
-        }
-        return true;
-    }
-    private void initArr(String[] board) 
-    {
-        for(int i=0;i<board.length;i++)
-        {
-            for(int j=0;j<board[i].length();j++)
-            {
-                arr[i][j] = board[i].charAt(j);
-            }
-        }
-    }    
-    public static void main(String[] args) 
-    {
-        Solution solution = new Solution();
-        solution.solution(6,6, new String[]{"TTTANT", "RRFACC", "RRRFCC", "TRRRAA", "TTMMMF", "TMMTTJ"});
         
+        while(true)
+        {
+            int val = gemMap.get(gems[r]);
+            if(val == 0)
+            {
+                nonDupliJewel++;
+            }
+            gemMap.put(gems[r],val+1);
+
+            if(nonDupliJewel == gemMap.size())
+            {
+                int val2 = gemMap.get(gems[l]);
+                gemMap.put(gems[l],val2-1);
+                if(val2-1 == 0)
+                {
+                    nonDupliJewel--;
+                }
+                l++;
+            }
+            //가지수가 부족할 때 r 증가
+            else if(r == gems.length)
+            {
+                break;
+            }
+            else if(nonDupliJewel < gemMap.size())
+            {
+                r++;
+            }
+            if(nonDupliJewel == gemMap.size())
+            {
+                if(curMinSize > r-l)
+                {
+                    curMinSize = r - l;
+                    answer[0] = l+1;
+                    answer[1] = r+1;
+                }
+            }
+        }
+
+        System.out.println(answer[0] + "," + answer[1]);
+        return answer;
     }
 }
+
+*/
