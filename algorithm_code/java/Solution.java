@@ -1,119 +1,169 @@
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
 
-class Solution {
-    public int[] solution(String[] gems) {
-        int[] answer = new int[2];
-        int l = 0;
-        int r = 0;        
-        int curMinSize = Integer.MAX_VALUE;
 
-        HashMap<String,Integer> gemMap = new HashMap<>();
-        HashSet<String> gemSet = new HashSet<>();
+class Node
+{
+    int val;
+    int x;
+    int y;
+    Node left;
+    Node right;
+    Node parent;
 
-        for(String gem : gems)
-        {
-            gemSet.add(gem);
-        }
-        
-        while(true)
-        {
-            if(gemSet.size() == gemMap.size())
-            {
-                System.out.println("a1");
-                int val2 = gemMap.get(gems[l]);
-                gemMap.put(gems[l],val2-1);
-                if(val2-1 == 0)
-                {
-                    gemMap.remove(gems[l]);
-                }
-                l++;
-            }
-            //가지수가 부족할 때 r 증가
-            else if(r == gems.length)
-            {
-                break;
-            }
-            else 
-            {
-                gemMap.put(gems[r], gemMap.getOrDefault(gems[r], 0) + 1);
-                r++;
-            }
+    boolean isLeftEmpty()
+    {
+        return false;
+    }
 
-             if(gemSet.size() == gemMap.size())
-            {
-                System.out.println("a2");
-                System.out.println();
-                if(curMinSize > r-l)
-                {
-                    curMinSize = r - l;
-                    answer[0] = l+1;
-                    answer[1] = r;
-                }
-            }
-        }
+    boolean isRightEmpty()
+    {
+        return false;
+    }
 
-        return answer;
+    Node(int val,int x,int y)
+    {
+        this.val = val;
+        this.x = x;
+        this.y = y;
+        this.left = null;
+        this.right = null;
     }
 }
 
-/* 
 class Solution {
-    public int[] solution(String[] gems) {
-        int[] answer = new int[2];
-        int l = 0;
-        int r = 0;        
-        int curMinSize = Integer.MAX_VALUE;
-        int nonDupliJewel = 0;
+    Node root = null;
+    
+    public int[][] solution(int[][] nodeinfo) {
+        Node[] nodeInfo = new Node[nodeinfo.length];
+        init(nodeinfo,nodeInfo);
 
-        HashMap<String,Integer> gemMap = new HashMap<>();
-        for(String gem : gems)
-        {
-            gemMap.put(gem, 0);
-        }
+        Arrays.sort(nodeInfo,new Comparator<Node>(){
+
+            @Override
+            public int compare(Node o1, Node o2) {
+
+                if(o2.y > o1.y)
+                {
+                    return 1;
+                }
+                else if(o1.y> o2.y)
+                {
+                    return -1;
+                }
+                else
+                {
+                    return o1.x > o2.x ? 1 : -1;
+                }
+            }
+        });
+
+        ArrayList<ArrayList<Node>> list = new ArrayList<>();
         
-        while(true)
+        ArrayList<Integer> lis = new ArrayList<>();
+
+        connectNodes(nodeInfo);
+        postOrder(root,lis,0);
+        int[][] answer = new int[2][lis.size()];
+        for(int i=0;i<lis.size();i++)
         {
-            int val = gemMap.get(gems[r]);
-            if(val == 0)
-            {
-                nonDupliJewel++;
-            }
-            gemMap.put(gems[r],val+1);
-
-            if(nonDupliJewel == gemMap.size())
-            {
-                int val2 = gemMap.get(gems[l]);
-                gemMap.put(gems[l],val2-1);
-                if(val2-1 == 0)
-                {
-                    nonDupliJewel--;
-                }
-                l++;
-            }
-            //가지수가 부족할 때 r 증가
-            else if(r == gems.length)
-            {
-                break;
-            }
-            else if(nonDupliJewel < gemMap.size())
-            {
-                r++;
-            }
-            if(nonDupliJewel == gemMap.size())
-            {
-                if(curMinSize > r-l)
-                {
-                    curMinSize = r - l;
-                    answer[0] = l+1;
-                    answer[1] = r+1;
-                }
-            }
+            answer[0][i] = lis.get(i);
         }
-
-        System.out.println(answer[0] + "," + answer[1]);
+        lis = new ArrayList<>();
+        inOrder(root,lis,0);
+        for(int i=0;i<lis.size();i++)
+        {
+            answer[1][i] = lis.get(i);
+        }
         return answer;
     }
-}
 
-*/
+    private void inOrder(Node node, ArrayList<Integer> list, int idx) 
+    {
+        if(node == null)
+        {
+            return;
+        }
+
+        inOrder(node.left,list,++idx);
+        //System.out.println(node.val);
+        inOrder(node.right,list,idx);
+        list.add(node.val);
+
+    }
+
+    private void postOrder(Node node,ArrayList<Integer> list,int idx) 
+    {
+        if(node == null)
+        {
+            return;
+        }
+
+        list.add(node.val);
+        // System.out.println(node.val);
+        // System.out.println(node.val + "-> 왼쪽");
+        postOrder(node.left,list,++idx);
+        // System.out.println(node.val + "-> 오른쪽");
+        postOrder(node.right,list,idx);
+    }
+
+    private void init(int[][] nodeinfo, Node[] nodeInfo2) 
+    {
+        for(int i=0;i<nodeinfo.length;i++)
+        {
+            int x = nodeinfo[i][0];
+            int y = nodeinfo[i][1];
+            int val = i+1;
+            nodeInfo2[i] = new Node(val, x, y);
+        }
+    }
+
+    private void connectNodes(Node[] list) 
+    {
+        for(Node node : list)
+        {
+            if(root == null)
+            {
+                root = node;
+            }
+            connectNode(root,node);
+        }
+    }
+
+    private boolean connectNode(Node parent,Node newNode) 
+    {
+        //왼쪽에 두기 
+        if(newNode.x < parent.x && parent.left == null)
+        {
+            // System.out.println(parent.val + " 왼쪽에 " + newNode.val);
+            parent.left = newNode;
+            return true;
+        }
+        //오른쪽
+        if(newNode.x > parent.x && parent.right == null)
+        {
+            // System.out.println(parent.val + " 오른쪽에 " + newNode.val);
+            parent.right = newNode;
+            return true;
+        }
+        
+        if(newNode.x < parent.x)
+        {   
+            connectNode(parent.left,newNode);
+        }
+        if(newNode.x > parent.x)
+        {
+            connectNode(parent.right,newNode);
+        }
+
+        return false;
+    }
+
+    public static void main(String[] args) 
+    {
+        Solution solution = new Solution();
+        solution.solution(new int[][] {{5,3},{11,5},{13,3},{3,5},{6,1},{1,3},{8,6},{7,2},{2,2}}	);
+    }
+}
