@@ -26,14 +26,12 @@ class Solution {
             setExternalScore(htmlMap.get(key),key);
         }
 
-        Double max = Double.MIN_VALUE;
+        Double max = (double) -1;
         int minIdx = Integer.MAX_VALUE;
 
-        System.out.println((double)max < (double)0.0);
         for(String key : idxMap.keySet())
         {
             double val = (double)(pointMap.get(key) + (double)baseMap.get(key));
-            val = 0.0;
             if(max < val)
             {
                 max = val;
@@ -43,7 +41,6 @@ class Solution {
                 minIdx = Math.min(idxMap.get(key),minIdx);
         }
 
-        System.out.println(minIdx);
 
         answer = minIdx;
         return answer;
