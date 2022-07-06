@@ -3,7 +3,7 @@ import java.util.Arrays;
 
 class Solution {
     int MAX = 10000000;
-    public int[] solution(long begin2, long end2) {
+    public int[] solution2(long begin2, long end2) {
         int begin = (int) begin2;
         int end = (int) end2;
         int answer[] = new int[end - begin + 1];
@@ -34,7 +34,7 @@ class Solution {
     }
 
     //효율성 통과 실패 아리스토텔레스의 채 이용
-    public int[] mySolution(long begin2, long end2) {
+    public int[] solution(long begin2, long end2) {
 
         int begin = (int) begin2;
         int end = (int) end2;
@@ -54,18 +54,18 @@ class Solution {
             for(long i=begin+1; i<=end; i++ )
                 primeList.add(1);
             
-            for(long i=2; i<=end/2; i++){
-                for(int startNum = (int) (begin - (begin % i)); startNum<=end; startNum+=i) 
+            for(long i=2; i<=Math.sqrt(end/2); i++){
+                for(int startNum = (int) (begin - (begin % i)); startNum<=MAX; startNum+=i) 
                 {
                     int arrayIdx = (int) (startNum - begin+1);
-                    if(arrayIdx <= 0)
+                    if(arrayIdx <= 0 && arrayIdx <= primeList.size())
                         continue;
                     
                     //2는 2번째 블록에 들어가지 않는다
                     if(i == startNum)
                         continue;
 
-                    if(startNum >= 2 && startNum <= end)
+                    if(startNum >= 2 && startNum <= MAX)
                     {
                         primeList.set((int) (arrayIdx),(int) i);
                     }
@@ -74,6 +74,10 @@ class Solution {
         }
         primeList.remove(0);
         int[] answer = primeList.stream().mapToInt(i -> i).toArray();
+        for(int i : answer)
+        {
+            System.out.print(i + " ");
+        }
         return answer;
     }
 
