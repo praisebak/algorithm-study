@@ -51,8 +51,8 @@ class Solution {
             answer = Math.min(move,answer);
         }
         return answer;
-    }
 
+    }
     private void searchCard(Pair curPair, int card, int[][] board,boolean[][] visit) 
     {
         Queue<Pair> q = new LinkedList<>();

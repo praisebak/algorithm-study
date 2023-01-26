@@ -155,7 +155,7 @@ public class Main {
         }
         List<String> s = new ArrayList<>();
         getAllDir(s,"",N,new boolean[4]);
-        com.pb.Easy2048 easy2048 = new com.pb.Easy2048();
+        Easy2048 easy2048 = new Easy2048();
         easy2048.MAX = max;
         for(String v : s){
             easy2048.solve(v,N,clone(board));
