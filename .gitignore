@@ -1,0 +1,17 @@
+basic_algorithm/input.txt
+algorithm_code/input.txt
+test.cpp
+test.exe
+*.exe
+.vscode/
+/.vscode
+.vscode/*
+/.idea
+Algorithm.iml
+algorithm_code/java/out/production/algorithm_code/.idea/misc.xml
+algorithm_code/java/out/production/algorithm_code/.idea/modules.xml
+algorithm_code/java/out/production/algorithm_code/.idea/runConfigurations.xml
+algorithm_code/java/out/production/algorithm_code/.idea/vcs.xml
+algorithm_code/java/out/production/algorithm_code/.idea/workspace.xml
+algorithm_code/java/.idea/misc.xml
+algorithm_code/java/.idea/misc.xml
