@@ -1,35 +1,3 @@
-Skip to content
-Search or jump to…
-Pull requests
-Issues
-Codespaces
-Marketplace
-Explore
- 
-@PraiseBak 
-PraiseBak
-/
-algorithm-study
-Public
-Fork your own copy of PraiseBak/algorithm-study
-Code
-Issues
-Pull requests
-Actions
-Projects
-Wiki
-Security
-Insights
-Settings
-Beta Try the new code view
-algorithm-study/b21610.java /
-@PraiseBak
-PraiseBak 집중해서 푸니까 잘풀리고 더나아가 재밌다
-Latest commit 1951799 now
- History
- 1 contributor
-130 lines (109 sloc)  2.82 KB
-
 
 import java.util.*;
 
@@ -160,18 +128,3 @@ class Solve {
       System.out.println(sum);
     }
 }
-Footer
-© 2023 GitHub, Inc.
-Footer navigation
-Terms
-Privacy
-Security
-Status
-Docs
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
-algorithm-study/b21610.java at master · PraiseBak/algorithm-study
