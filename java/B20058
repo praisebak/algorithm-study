@@ -1,0 +1,186 @@
+package com.study;
+
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+
+class Solve
+{
+    int mostLeftedIceLand = 0;
+    int mostLeftedIceLandSize = 0;
+    int sumLeftedIce = 0;
+    int N = 0;
+    int L = 0;
+    int[][] ice;
+    int fullIceLandLength = 0;
+    int[] QList;
+    int[] dx = {-1, 1, 0, 0};
+    int[] dy = {0, 0, -1, 1};
+
+    boolean[][] isVisit = new boolean[fullIceLandLength][fullIceLandLength];
+
+    void init()
+    {
+        Scanner sc = new Scanner(System.in);
+        N = sc.nextInt();
+        L = sc.nextInt();
+        QList = new int[L];
+
+        fullIceLandLength = (int) Math.pow(2, N);
+        ice = new int[fullIceLandLength][fullIceLandLength];
+        for (int i = 0; i < fullIceLandLength; i++)
+        {
+            for (int j = 0; j < fullIceLandLength; j++)
+            {
+                ice[i][j] = sc.nextInt();
+            }
+        }
+        for (int i = 0; i < L; i++)
+        {
+            QList[i] = sc.nextInt();
+        }
+    }
+
+    void solve()
+    {
+        for (int l : QList)
+        {
+            //격자크기
+            int windowSize = (int) Math.pow(2, l);
+
+            //격자크기 회전
+            for (int i = 0; i < fullIceLandLength; i += windowSize)
+            {
+                for (int j = 0; j < fullIceLandLength; j += windowSize)
+                {
+                    rotate(i, j, windowSize);
+                }
+            }
+
+            int[][] tmp = new int[fullIceLandLength][fullIceLandLength];
+            for(int i=0;i<fullIceLandLength;i++){
+                for (int j = 0; j < fullIceLandLength; j++)
+                {
+                    tmp[i][j] = ice[i][j];
+                }
+            }
+
+            for (int i = 0; i < fullIceLandLength; i++)
+            {
+                for (int j = 0; j < fullIceLandLength; j++)
+                {
+                    if(ice[i][j] == 0) continue;
+                    int count = 0;
+                    for (int d = 0; d < 4; d++)
+                    {
+                        int nY = i + dy[d];
+                        int nX = j + dx[d];
+                        if (isValid(nY, nX, i, j, windowSize) && ice[nY][nX] != 0)
+                        {
+                            count++;
+                        }
+                    }
+
+                    if (count < 3)
+                    {
+                        tmp[i][j]--;
+                    }
+                }
+            }
+            ice = tmp;
+        }
+
+        isVisit = new boolean[fullIceLandLength][fullIceLandLength];
+        for (int i = 0; i < fullIceLandLength; i++)
+        {
+            for (int j = 0; j < fullIceLandLength; j++)
+            {
+                if (isVisit[i][j])
+                {
+                    continue;
+                }
+                if (ice[i][j] > 0)
+                {
+                    isVisit[i][j] = true;
+                    mostLeftedIceLandSize = Math.max(dfs(i, j, 1),mostLeftedIceLandSize);
+                }
+            }
+        }
+
+    }
+
+    private int dfs(int r, int c, int count)
+    {
+        sumLeftedIce += ice[r][c];
+        for (int i = 0; i < 4; i++)
+        {
+            int nY = r + dy[i];
+            int nX = c + dx[i];
+
+
+            if (nY >= fullIceLandLength || nX >= fullIceLandLength || nY < 0 || nX < 0)
+            {
+                continue;
+            }
+            if (isVisit[nY][nX])
+            {
+                continue;
+            }
+
+            if(ice[nY][nX] == 0) continue;
+
+            isVisit[nY][nX] = true;
+            count = Math.max(dfs(nY, nX, count + 1),count);
+        }
+        return count;
+    }
+
+    boolean isValid(int r, int c, int relativeR, int relativeC, int windowSize)
+    {
+        if (r < 0 || c < 0 || r >= fullIceLandLength || c >= fullIceLandLength)
+        {
+            return false;
+        }
+        //영역침범
+        //새 r = 2인데 시작점이 2면 windowsize 초과했으니까
+        return true;
+    }
+
+
+    private void rotate(int startRow, int startCal, int windowSize)
+    {
+        int[][] replaceArr = new int[windowSize][windowSize];
+        for (int i = 0; i < windowSize; i++)
+        {
+            for (int j = 0; j < windowSize; j++)
+            {
+                replaceArr[i][j] = ice[startRow + windowSize - 1 - j][startCal + i];
+            }
+        }
+
+        for (int i = 0; i < windowSize; i++)
+        {
+            for (int j = 0; j < windowSize; j++)
+            {
+                ice[startRow + i][startCal + j] = replaceArr[i][j];
+            }
+        }
+    }
+}
+
+
+public class Main
+{
+
+    public static void main(String[] args)
+    {
+        Solve solve = new Solve();
+        solve.init();
+        //        solve.rotateTest();
+        solve.solve();
+        System.out.println(solve.sumLeftedIce);
+        System.out.println(solve.mostLeftedIceLandSize);
+
+    }
+}
