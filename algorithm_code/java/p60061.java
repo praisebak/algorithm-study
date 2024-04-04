@@ -139,7 +139,7 @@ class Solution {
         return false;
     }
 
-    private boolean `checkRange(int x, int y,int[][] map) {
+    private boolean checkRange(int x, int y,int[][] map) {
         if (x >= map[0].length || x < 0 || y >= map.length || y < 0) {
             return false;
         }

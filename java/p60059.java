@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-public 
-=======
-//re solve
->>>>>>> dff76fc01f3e961883add20f65c50a3938079658
 class Solution
 {
     boolean solution(int[][] key,int[][] lock)
@@ -84,14 +79,10 @@ class Solution
         int[][] lock = {{1,1,1},{1,1,0},{1,0,1}};
         solu.solution(key, lock);
     }
+}
+
 
     
-<<<<<<< HEAD
-}class p60059 {
-    
-}
-=======
-}
 
 /*
 class Solution {
@@ -171,4 +162,3 @@ class Solution {
 }
 
 */
->>>>>>> dff76fc01f3e961883add20f65c50a3938079658

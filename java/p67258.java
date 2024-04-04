@@ -59,10 +59,3 @@ class Solution {
         return answer;
     }
 }
-
-// public static void main(String[] args) {
-//     Solution solution = new Solution();
-
-// } p67258 {
-    
-}

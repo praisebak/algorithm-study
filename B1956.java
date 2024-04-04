@@ -6,7 +6,7 @@ Write your code in this editor and press "Run" button to execute it.
 
 *******************************************************************************/
 import java.util.*;
-public class Main
+public class B1956
 {
 	public static void main(String[] args) {
 		int V = 3;
@@ -25,7 +25,6 @@ public class Main
 		        if(i != j){
 		            map[i][j] = MAX;        
 		        }
-		        
 		    }
 		}
 		

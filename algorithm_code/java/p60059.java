@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-public 
-=======
-//re solve
->>>>>>> dff76fc01f3e961883add20f65c50a3938079658
-class Solution
+public class Solution
 {
     boolean solution(int[][] key,int[][] lock)
     {
@@ -86,11 +81,8 @@ class Solution
     }
 
     
-<<<<<<< HEAD
 }class p60059 {
     
-}
-=======
 }
 
 /*
@@ -171,4 +163,3 @@ class Solution {
 }
 
 */
->>>>>>> dff76fc01f3e961883add20f65c50a3938079658

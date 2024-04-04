@@ -1,4 +1,4 @@
-public import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.Stack;
 
 class Node
@@ -96,6 +96,4 @@ class Solution {
         return answer;
     }
 
-} p81303 {
-    
 }
