@@ -4,16 +4,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-class Main{
-    public static void main(String[] args) throws IOException {
-        new B14719().solve();
-    }
-}
 
 
 class B14719 {
-    private int H;
-    private int W;
+
+
+    int H;
+    int W;
 
     public void solve() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -30,25 +27,35 @@ class B14719 {
             arr[index++] = v;
         }
 
-        int sum = 0;
+        int result = 0;
+        for(int i=1;i<W-1;i++){
+            int curHeight = arr[i];
 
-        for(int i=1;i< W-1;i++){
             int left = 0;
-            int right = 0;
-
             for(int j=0;j<i;j++){
-                left = Math.max(left,arr[j]);
+                if(arr[j] > left){
+                    left = arr[j];
+                }
             }
 
-            for(int j=i+1;j<W;j++){
-                right = Math.max(right,arr[j]);
+            int right = 0;
+            for(int j= i+1;j<W;j++){
+                if(arr[j] > right){
+                    right = arr[j];
+                }
             }
 
-            if(left > arr[i] && right > arr[i]){
-                sum += Math.min(left,right) - arr[i];
+            if(right != 0 && left != 0 && left > arr[i] && right > arr[i]){
+                int minHegiht = Math.min(right,left);
+                result += minHegiht - curHeight;
+//                System.out.println(left + "," + right + "=" +  result);
             }
         }
-        System.out.println(sum);
+
+
+
+
+        System.out.println(result);
     }
 
 }
