@@ -3,32 +3,20 @@ package java;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Queue;
-
-
-class Main{
-    public static void main(String[] args) throws IOException {
-        new B2138().solve();
-    }
-}
+import java.util.Arrays;
 
 class B2138 {
 
     int N;
     String s;
     String ans;
-    StringBuilder sb = new StringBuilder();
-    HashSet<String> set = new HashSet<>();
 
     public void solve() throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(bufferedReader.readLine());
         s = bufferedReader.readLine();
         ans = bufferedReader.readLine();
-
-        bfs();
+        greedy();
     }
 
 
@@ -42,54 +30,93 @@ class B2138 {
         }
     }
 
-
-
-    public String changeSwitch(int i, String cur){
-        StringBuilder sb = new StringBuilder(cur);
-        if(i == 0){
-            sb.setCharAt(0, getReversedSwitch(cur.charAt(0)));
-            sb.setCharAt(1, getReversedSwitch(cur.charAt(1)));
-        }else if(i == cur.length()-1){
-            sb.setCharAt(i, getReversedSwitch(cur.charAt(i)));
-            sb.setCharAt(i-1, getReversedSwitch(cur.charAt(i-1)));
-        }else{
-            sb.setCharAt(i, getReversedSwitch(cur.charAt(i)));
-            sb.setCharAt(i-1, getReversedSwitch(cur.charAt(i-1)));
-            sb.setCharAt(i+1, getReversedSwitch(cur.charAt(i+1)));
+    public boolean[] clone(boolean[] arr){
+        boolean[] newArr = new boolean[arr.length];
+        for(int i=0;i<arr.length;i++){
+            newArr[i] = arr[i];
         }
-        return sb.toString();
+        return newArr;
+    }
+
+
+
+    public boolean[] changeSwitch(int i, boolean[] cur){
+        cur[i] = !cur[i];
+        if(i == 0){
+            cur[i+1] = !cur[i+1];
+        }else if(i == cur.length-1){
+            cur[i-1] = !cur[i-1];
+        }else{
+            cur[i-1] = !cur[i-1];
+            cur[i+1] = !cur[i+1];
+        }
+        return cur;
     }
 
 
     class Node{
-        String str;
+        boolean[] arr;
         int time;
 
-        Node(int time,String str){
-            this.str = str;
+        Node(int time,boolean[] arr){
+            this.arr = arr;
             this.time = time;
         }
     }
 
 
-    public void bfs(){
+    public void greedy(){
+        boolean[] A = new boolean[N];
+        boolean[] B = new boolean[N];
+        boolean[] result = new boolean[N];
+        int aSwitchCount = 1;
+        int bSwitchCount = 0;
 
-        Queue<Node> que = new LinkedList<>();
-        que.add(new Node(0,s));
-        set.add(s);
+        //초기값지정
 
+        for(int i=0;i<N;i++){
+            if(ans.charAt(i) == '1'){
+                result[i] = true;
+            }else{
+                result[i] = false;
+            }
 
-        while(!que.isEmpty()){
-            Node cur = que.poll();
-            for(int i=0;i<cur.str.length();i++){
-                String result = changeSwitch(i,cur.str);
-                if(!set.contains(result)){
-                    set.add(result);
-                    que.add(new Node(cur.time+1,result));
+            if(s.charAt(i) == '1'){
+                A[i] = true;
+                B[i] = true;
+            }else{
+                A[i] = false;
+                B[i] = false;
+            }
+        }
+
+        //A는 누르고 B는 누르지 않음 초기값
+        A = changeSwitch(0,A);
+
+        for(int i=1;i<N;i++){
+            int left = i-1;
+            //이전값이 정답의 것과 다르면 스위치킴
+            if(A[left] != result[left]){
+                A = changeSwitch(i,A);
+                aSwitchCount++;
+            }
+            if(B[left] != result[left]){
+                B = changeSwitch(i,B);
+                bSwitchCount++;
+            }
+
+            //A와 B가 동일함
+            if(Arrays.equals(A,B)){
+                if(Arrays.equals(A,result)){
+                    System.out.println(Math.min(aSwitchCount,bSwitchCount));
+                    return;
                 }
-
-                if(result.equals(ans)){
-                    System.out.println(cur.time+1);
+            }else{
+                if(Arrays.equals(A,result)){
+                    System.out.println(aSwitchCount);
+                    return;
+                }else if(Arrays.equals(B,result)){
+                    System.out.println(bSwitchCount);
                     return;
                 }
             }
@@ -97,5 +124,7 @@ class B2138 {
 
         System.out.println(-1);
     }
+
+
 }
 
