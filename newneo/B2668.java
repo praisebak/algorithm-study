@@ -6,47 +6,51 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Scanner;
 
-class B2668{
+class B2668_second{
     int N;
     int[] arr;
     boolean[] visit;
-    List<Integer> answer = new ArrayList<>();
+    int answer = 0;
+    List<Integer> answerList = new ArrayList<>();
+
     public void solve() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-         N = Integer.parseInt(br.readLine());
+        N = Integer.parseInt(br.readLine());
+        arr = new int[N+1];
 
-         arr = new int[N+1];
-         visit = new boolean[N+1];
-         for(int i=1;i<=N;i++){
-             arr[i] = Integer.parseInt(br.readLine());
-         }
+        for(int i=1;i<=N;i++){
+            arr[i] = Integer.parseInt(br.readLine());
+        }
 
-         for(int i=1;i<=N;i++){
-             visit[i] = true;
-             dfs(i,i);
-             visit[i] = false;
-         }
+        visit = new boolean[N+1];
+        for(int i=1;i<=N;i++){
+            visit[i] = true;
+            dfs(i,i,1);
+            visit[i] = false;
+        }
 
-         System.out.println(answer.size());
-
-         answer.sort(Comparator.naturalOrder());
-         for(Integer i : answer){
-             System.out.println(i);
-         }
+        answerList.sort(Comparator.naturalOrder());
+        System.out.println(answerList.size());
+        for(Integer result : answerList){
+            System.out.println(result);
+        }
     }
 
-    private void dfs(int index, int target) {
-        int next = arr[index];
-        if(!visit[next]){
-            visit[next] = true;
-            dfs(next,target);
-            visit[next] = false;
-        }
+    public void dfs(int startIdx,int idx,int depth){
+            int next = arr[idx];
 
-        if(target == arr[index]){
-            answer.add(index);
-        }
+            if(visit[next] && startIdx == next){
+                answerList.add(idx);
+                return;
+            }else if(visit[next]){
+                return;
+            }
+
+            visit[next] = true;
+            dfs(startIdx,next,depth+1);
+            visit[next] = false;
+
+
     }
 }
