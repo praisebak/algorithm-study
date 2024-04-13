@@ -64,6 +64,8 @@ public class B1655
                 arr.add(idx);
                 return true;
             }
+
+
         }
 
         //처음인경우
