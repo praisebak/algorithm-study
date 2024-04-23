@@ -8,6 +8,12 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 
+class B5972Main{
+    public static void main(String[] args) throws IOException{
+        B5972_second b5972Second = new B5972_second();
+        b5972Second.solve();
+    }
+}
 class B5972_second {
 
     class Node{
@@ -37,6 +43,7 @@ class B5972_second {
             graph.add(new ArrayList<>());
         }
 
+
         for(int i=0;i<N;i++){
             splitInput = br.readLine().split(" ");
             int a = Integer.parseInt(splitInput[0]);
@@ -53,9 +60,6 @@ class B5972_second {
         dist[1] = 0;
         dijstra();
         System.out.println(dist[N]);
-
-
-
     }
 
     private void dijstra() {
