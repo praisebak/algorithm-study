@@ -3,22 +3,45 @@ package newneo;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
 
-public class B2234 {
+class B2234 {
 
     private static int maxRoomSize = Integer.MIN_VALUE;
     private static int maxRoomSizeWithoutWall = Integer.MIN_VALUE;
+    private static boolean[][][] breakWallVisit;
 
 
-    class Node{
-        public Node(int y, int x) {
+    static class Node{
+        private final int idx;
+
+        @Override
+        public String toString() {
+            return "Node{" +
+                    "idx=" + idx +
+                    ", y=" + y +
+                    ", x=" + x +
+                    ", isbreak=" + isbreak +
+                    ", roomSize=" + roomSize +
+                    '}';
+        }
+
+        public Node(int y, int x, boolean isBreak, int roomSize,int idx) {
+
             this.y = y;
             this.x = x;
+            this.isbreak = isBreak;
+            this.roomSize = roomSize;
+            this.idx = idx;
         }
 
         int y;
         int x;
+        boolean isbreak;
+        int roomSize;
     }
+
 
     /**
      * N,M,상하좌우
@@ -58,63 +81,66 @@ public class B2234 {
             }
         }
 
-        /**
-         * 7 4
-         * 11 6 11 6 3 10 6
-         * 7 9 6 13 5 15 5
-         * 1 10 12 7 13 7 5
-         * 13 11 10 8 10 12 13
-         */
-        for(int i=0;i<N;i++){
-            for (int j = 0; j < M; j++) {
-                for (int k = 0; k < 4; k++) {
-                    System.out.print(map[i][j][k] + " ");
-                }
-                System.out.println();
-            }
-        }
-
+        breakWallVisit = new boolean[N][M][2550];
 
         int roomCount = 0;
         for(int i=0;i<N;i++){
             for (int j = 0; j < M; j++) {
-                //이성에 있는 방의 개수
-                if(!visit[i][j]) {
-                    roomCount++;
-                }
-                visit[i][j] = true;
-                dfs(i,j,1,false);
+                if(breakWallVisit[i][j][0]) continue;
+                roomCount++;
+                bfs(i,j);
             }
         }
 
+
         System.out.println(roomCount);
         System.out.println(maxRoomSize);
-        System.out.println(maxRoomSizeWithoutWall);
+        System.out.println(maxRoomSizeWithoutWall == Integer.MIN_VALUE ? maxRoomSize : maxRoomSizeWithoutWall );
 
     }
 
-    private static void dfs(int y,int x,int roomSize,boolean removeWall) {
-        System.out.println(y + "," + x + " = roomSize" + roomSize);
-        if(removeWall){
-            maxRoomSizeWithoutWall = Math.max(roomSize, maxRoomSizeWithoutWall);
-        }else{
-            maxRoomSize = Math.max(roomSize, maxRoomSize);
+    private static void bfs(int y, int x) {
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(new Node(y,x,false,1,0));
+
+        int[] val = new int[2550];
+        int idx = 0;
+        val[idx] = 1;
+        breakWallVisit[y][x][idx] = true;
+        while (!queue.isEmpty()){
+            Node cur = queue.poll();
+            for(int i=0;i<4;i++) {
+                int nY = dy[i] + cur.y;
+                int nX = dx[i] + cur.x;
+                if (!isValid(nY, nX)) continue;
+
+                if(breakWallVisit[nY][nX][cur.idx]) continue;
+                if(breakWallVisit[nY][nX][0]) continue;
+
+                //벽있는데 처음부숨
+                if (map[cur.y][cur.x][i] && !cur.isbreak){
+                    idx++;
+                    val[idx]++;
+                    queue.add(new Node(nY,nX,true, 1,idx));
+                    breakWallVisit[nY][nX][idx] = true;
+                    //벽이 없는 케이스라면
+                    //벽을 부쉈든 안부쉈든 진행
+                }else if(!map[cur.y][cur.x][i]){
+                    val[cur.idx]++;
+                    queue.add(new Node(nY,nX,cur.isbreak,val[cur.idx],cur.idx));
+                    breakWallVisit[nY][nX][cur.idx] = true;
+                }
+            }
         }
 
-        for(int i=0;i<4;i++){
-            int nY = dy[i] + y;
-            int nX = dx[i] + x;
-            if(!isValid(nY,nX)) continue;
-            if(visit[nY][nX]) continue;
-            //벽이있으면
-            if(map[y][x][i]) continue;
-            visit[nY][nX] = true;
-            System.out.println(nY + "," + nX);
-
-            dfs(nY,nX,roomSize+1,removeWall);
+        maxRoomSize = Math.max(maxRoomSize,val[0]);
+        for (int i = 1; i < idx; i++) {
+            maxRoomSizeWithoutWall = Math.max(maxRoomSizeWithoutWall,val[0] + val[i]);
         }
     }
 
+
+    //뚫린걸 true잡고
     private static boolean isValid(int nY, int nX) {
         if(nY < 0 || nX < 0 || nY >= N || nX >= M) return false;
         return true;
@@ -122,14 +148,12 @@ public class B2234 {
 
 
     private static void inputMapAsParse(int i, int j, String string) {
-
         int remainNum = Integer.parseInt(string);
         int idx = 3;
         for (int num=8; num > 0;num /=2){
             if(remainNum / num == 1){
                 map[i][j][idx] = true;
             }
-
             remainNum %= num;
             idx--;
         }
