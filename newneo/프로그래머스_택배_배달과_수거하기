@@ -1,0 +1,59 @@
+
+import java.util.*;
+
+class Solution {
+    public long solution(int cap, int n, int[] deliveries, int[] pickups) {
+        long answer = 0;
+        
+        Stack<Integer> dStack = new Stack<>();
+        Stack<Integer> pStack = new Stack<>();
+        
+        for(int i=0;i<deliveries.length;i++){
+            dStack.add(deliveries[i]);
+            pStack.add(pickups[i]);
+        }
+        
+       long size = 0;
+        while(!(dStack.size() == 0 && pStack.size() == 0)){
+            int dCap = cap;
+            //아무것도 없는 집이 먼 거리에 있으면 제거
+            while(dStack.size() != 0 && dStack.peek() == 0) dStack.pop();
+            while(pStack.size() != 0 && pStack.peek() == 0) pStack.pop();
+
+            long curMaxDepth = Math.max(dStack.size(),pStack.size());
+            answer += curMaxDepth * 2;
+             
+            //dStack에서 제거하기
+            while(dStack.size() != 0 && dCap != 0){
+                int curD = dStack.peek();
+                if(dCap - curD < 0){
+                    dStack.pop();   
+                    dStack.push(curD - dCap); 
+                    dCap = 0;
+                    break;
+                }else{
+                    dCap -= curD;
+                    dStack.pop();
+                }
+            }
+
+            int curTruckSpace = cap;
+            while(pStack.size() != 0 && curTruckSpace != 0){
+                int curP = pStack.peek();
+                
+                if(curTruckSpace - curP < 0){
+                    pStack.pop();
+                    pStack.push(curP - curTruckSpace); 
+                    curTruckSpace = 0;
+                    break;
+                }else{
+                    curTruckSpace -= curP;
+                    pStack.pop();
+                }
+            }
+            
+        }
+                
+        return answer;
+    }
+}
