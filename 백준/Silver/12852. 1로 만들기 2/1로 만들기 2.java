@@ -1,68 +1,68 @@
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-
-class Main{
-    public static void main(String[] args) throws IOException{
+class Main {
+    public static void main(String[] args) throws IOException {
         Solve solve = new Solve();
         solve.solve();
-
     }
 }
 
 class Solve{
-    int[] dp;
-    int[] trace;
+
+    private int[] trace;
+    private int[] dp;
+
     public void solve() throws IOException{
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(bufferedReader.readLine());
-        dp = new int[1000001];
-        trace = new int[1000001];
 
-        System.out.println(dfs(N,1));
-        System.out.print(N + " ");
-        while (trace[N] != 0){
-            System.out.print(trace[N] + " ");
-            N = trace[N];
+        dp = new int[N+1];
+        trace = new int[N+1];
+
+        int next = N;
+        StringBuilder stringBuilder = new StringBuilder(N + " ");
+        dp[1] = 1;
+        System.out.println(perm(N,0)-1);
+        while (next != 1){
+            next = trace[next];
+            stringBuilder.append(next).append(" ");
         }
-
-
-
+        System.out.println(stringBuilder.toString());
     }
 
+    private int perm(int num,int count) {
+        if(dp[num] != 0){
+            return dp[num];
+        }
 
-    private int dfs(int n,int depth) {
-        if(dp[n] != 0) return dp[n];
-        if(n == 1) return 0;
+        int nextDP = Integer.MAX_VALUE;
+        int nextNum = 0;
 
-        int minDepth = 2000000000;
-        int minVal = 0;
+        if(num % 3 == 0){
+            nextDP = Math.min(perm(num / 3,count+1),nextDP)+1;
+            nextNum = num / 3;
+        }
 
-        if(n % 3 == 0){
-            int cur = dfs(n/3,depth+1)+1;
-            if(minDepth > cur){
-                minDepth = cur;
-                minVal = n/3;
+        if(num % 2 == 0){
+            int cur  = perm(num / 2,count+1)+1;
+            if(nextDP > cur){
+                nextDP = cur;
+                nextNum = num / 2;
             }
         }
 
-        if(n % 2 == 0){
-            int cur = dfs(n / 2, depth + 1)+1;
-            if (minDepth > cur) {
-                minDepth = cur;
-                minVal = n / 2;
-            }
+        int cur = perm(num-1,count+1)+1;
+        if(nextDP > cur){
+            nextDP = cur;
+            nextNum = num-1;
         }
 
-        int cur = dfs(n-1,depth+1)+1;
-        if(minDepth > cur){
-            minDepth = cur;
-            minVal = n-1;
-        }
-
-        dp[n] = minDepth;
-        trace[n] = minVal;
-        return dp[n];
+        dp[num] = nextDP;
+        trace[num] = nextNum;
+        return nextDP;
     }
 }
+
