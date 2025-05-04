@@ -1,9 +1,9 @@
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-class Main {
+
+class Main{
     public static void main(String[] args) throws IOException {
         Solve solve = new Solve();
         solve.solve();
@@ -12,57 +12,53 @@ class Main {
 
 class Solve{
 
-    private int[] trace;
     private int[] dp;
+    private int[] trace;
 
     public void solve() throws IOException{
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(bufferedReader.readLine());
-
         dp = new int[N+1];
-        trace = new int[N+1];
-
-        int next = N;
-        StringBuilder stringBuilder = new StringBuilder(N + " ");
-        dp[1] = 1;
-        System.out.println(perm(N,0)-1);
-        while (next != 1){
-            next = trace[next];
-            stringBuilder.append(next).append(" ");
+        trace = new int[1000001];
+        Arrays.fill(dp,Integer.MAX_VALUE);
+        dp[1]=1;
+        sol(N);
+        System.out.println(dp[N]-1);
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = N; i != 0; i = trace[i]) {
+            stringBuilder.append(i).append(" ");
         }
+
         System.out.println(stringBuilder.toString());
     }
 
-    private int perm(int num,int count) {
-        if(dp[num] != 0){
+    private int sol(int num) {
+        if(num == 1){
+            return 1;
+        }
+        if(dp[num] != Integer.MAX_VALUE){
             return dp[num];
         }
 
-        int nextDP = Integer.MAX_VALUE;
-        int nextNum = 0;
-
         if(num % 3 == 0){
-            nextDP = Math.min(perm(num / 3,count+1),nextDP)+1;
-            nextNum = num / 3;
-        }
-
-        if(num % 2 == 0){
-            int cur  = perm(num / 2,count+1)+1;
-            if(nextDP > cur){
-                nextDP = cur;
-                nextNum = num / 2;
+            int result = sol(num / 3);
+            if(result < dp[num]){
+                trace[num] = num/3;
+                dp[num] = result+1;
             }
         }
-
-        int cur = perm(num-1,count+1)+1;
-        if(nextDP > cur){
-            nextDP = cur;
-            nextNum = num-1;
+        if(num % 2 == 0){
+            int result = sol(num / 2);
+            if(result < dp[num]){
+                trace[num] = num/2;
+                dp[num] = result+1;
+            }
         }
-
-        dp[num] = nextDP;
-        trace[num] = nextNum;
-        return nextDP;
+        int result = sol(num-1);
+        if(result < dp[num]){
+            trace[num] = num-1;
+            dp[num] = result+1;
+        }
+        return dp[num];
     }
 }
-
