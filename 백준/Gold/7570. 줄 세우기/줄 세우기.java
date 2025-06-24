@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 
 class Main{
     public static void main(String[] args) throws IOException {
@@ -8,39 +9,35 @@ class Main{
         solve.solve();
     }
 }
+
+
 class Solve{
     public void solve() throws IOException{
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(bufferedReader.readLine());
         String[] sArr = bufferedReader.readLine().split(" ");
-        int[] arr = new int[N+1];
+
+        int[] dp = new int[N+1];
+        Arrays.fill(dp,1);
+        dp[0] = 0;
         int[] position = new int[N+1];
-        for (int i = 0; i < N; i++) {
-            arr[i] = Integer.parseInt(sArr[i]);
-            position[arr[i]] = i;
-        }
-
+        int[] arr = new int[N+1];
         int answer = 1;
-        for (int i = 0; i < N-1; i++) {
-            int tmp = 1;
-            int nextChild = arr[i]+1;
-
-            int curI = i;
-            if(nextChild >= N+1) continue;
-            int nI = position[nextChild];
-
-            while (curI < nI){
-                tmp++;
-                if(nextChild == N){
-                    break;
-                }
-
-                curI = position[nextChild];
-                nI = position[++nextChild];
-            }
-
-            answer = Math.max(answer,tmp);
+        //내 앞에 몇명있는지?
+        for (int i = 0; i < N; i++) {
+            int curIdx = Integer.parseInt(sArr[i]);
+            arr[i] = curIdx;
+            position[curIdx] = i;
         }
+
+        for (int i = 0; i < N; i++) {
+            int curIdx = arr[i];
+            if(curIdx != N && position[curIdx+1] > position[curIdx]){
+                dp[curIdx+1] = dp[curIdx]+1;
+                answer = Math.max(answer,dp[curIdx+1]);
+            }
+        }
+
         System.out.println(N - answer);
     }
 }
