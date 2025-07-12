@@ -1,54 +1,47 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 
 class Main{
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws IOException {
         Solve solve = new Solve();
         solve.solve();
     }
 }
-
 class Solve{
-    public void solve() throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(br.readLine());
-        String[] sArr = br.readLine().split(" ");
+    public void solve() throws IOException{
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(bufferedReader.readLine());
         int[] arr = new int[N];
-        for(int i=0;i<N;i++){
+        String[] sArr = bufferedReader.readLine().split(" ");
+
+        for (int i = 0; i < sArr.length; i++) {
             arr[i] = Integer.parseInt(sArr[i]);
         }
 
-        Arrays.sort(arr);
+        int left = 0;
+        int right = N-1;
+        int answerLeft = 0;
+        int answerRight = 0;
+        int answerValue = Integer.MAX_VALUE;
+        while (left < right){
+            int sum = arr[left] + arr[right];
 
-        int answer = Integer.MAX_VALUE;
-
-        int leftAnswer = 0;
-        int rightAnswer = 0;
-
-        for(int i=0;i<N;i++){
-            int right = N-1;
-            int left = i+1;
-
-            while(left <= right){
-                int mid = (int) (((long)left + right) / 2);
-                int absVal = Math.abs(arr[mid] + arr[i]);
-
-                if(arr[mid] + arr[i] > 0){
-                    right = mid-1;
-                }else{
-                    left = mid +1;
-                }
-
-                if(absVal < answer){
-                    leftAnswer = arr[i];
-                    rightAnswer = arr[mid];
-                    answer = absVal;
-                }
+            if(Math.abs(sum) < answerValue){
+                answerValue = Math.abs(sum);
+                answerLeft = arr[left];
+                answerRight = arr[right];
             }
-
+            //0보다 작으면 오른쪽으로 가자
+            if(sum < 0){
+                left++;
+            }else{
+                right--;
+            }
         }
-        System.out.println(leftAnswer + " " + rightAnswer);
+
+        System.out.println(answerLeft + " " + answerRight);
+
+
     }
 }
