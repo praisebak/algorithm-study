@@ -1,9 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.InvocationHandler;
-import java.util.Arrays;
-import javax.print.DocFlavor.STRING;
+import javax.swing.KeyStroke;
 
 class Main{
     public static void main(String[] args) throws IOException {
@@ -13,40 +11,41 @@ class Main{
 }
 
 class Solve{
+    class Item{
+        int weight;
+        int value;
 
+        public Item(int weight, int value) {
+            this.weight = weight;
+            this.value = value;
+        }
+    }
     public void solve() throws IOException{
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         String[] sArr = bufferedReader.readLine().split(" ");
         int N = Integer.parseInt(sArr[0]);
-        int maxWeight = Integer.parseInt(sArr[1]);
+        int K = Integer.parseInt(sArr[1]);
+        Item[] arr = new Item[N];
 
-        int[] weights = new int[N+1];
-        int[] values = new int[N+1];
         for (int i = 0; i < N; i++) {
             sArr = bufferedReader.readLine().split(" ");
-            int weight = Integer.parseInt(sArr[0]);
-            int value = Integer.parseInt(sArr[1]);
-            weights[i]=  weight;
-            values[i] = value;
+            int left = Integer.parseInt(sArr[0]);
+            int right = Integer.parseInt(sArr[1]);
+            arr[i] = new Item(left,right);
         }
 
+        int[] dp = new int[K+1];
         int answer = 0;
-        int[] dp = new int[maxWeight+1];
-        for (int i = 0; i < N; i++) {
-            int curWeight = weights[i];
-            int curValue = values[i];
-
-            int[] tmpDp = Arrays.copyOf(dp, dp.length);
-
-            for (int j = 0; j <= maxWeight; j++) {
-                if(j + curWeight > maxWeight) break;
-                tmpDp[j+curWeight] = Math.max(dp[j+curWeight],dp[j] + curValue);
-                answer = Math.max(tmpDp[j+curWeight],answer);
+        for(int i=0;i<N;i++){
+            Item cur = arr[i];
+            for (int j = K; j >=0; j--) {
+                if(j - cur.weight >= 0){
+                    dp[j] = Math.max(dp[j-cur.weight] + cur.value,dp[j]);
+                    answer = Math.max(answer,dp[j]);
+                }
             }
-            dp = tmpDp;
         }
+
         System.out.println(answer);
     }
-
-
 }
