@@ -1,40 +1,33 @@
-import java.util.*;
-import java.io.*;
 class Solution {
-    int maxScore = 0;
-    int N;
-
-    int[][] land;
-    public int solution(int[][] land) {
-        N = land.length;
-        this.land = land;
-
-        int[] newArr = new int[4];
-        int[] tmpTmp= new int[4];
-        dfs(land, 0,newArr,tmpTmp);
+    int solution(int[][] land) {
 
 
-        return maxScore;
-    }
+        int[][] dp = new int[land.length][4];
+        dp[0][0] = land[0][0];
+        dp[0][1] = land[0][1];
+        dp[0][2] = land[0][2];
+        dp[0][3] = land[0][3];
+        
+        for(int i=1;i<land.length;i++){
+            //같은 열을 안밟게해서 최대값 계산해서 출력하면됨
 
-    // DFS 탐색
-    void dfs(int[][] land, int row2,int[] tmpMaxArr,int[] tmpTmp) {
-        // 종료 조건: 마지막 행까지 도달
-        for(int row=0;row< N;row++){
-                for (int col = 0; col < 4; col++) {
-                int prevMax = 0;
-                for(int i=0;i<4;i++){
-                    if(i == col) continue;
-                    prevMax = Math.max(prevMax,tmpTmp[i]);
-                }
-
-                tmpMaxArr[col] = land[row][col] + prevMax;
-                maxScore = Math.max(tmpMaxArr[col],maxScore);
+            //이전에서 참고할곳
+            for(int j=0;j<4;j++){
+                //현재 넣을곳
+                for(int k=0;k<4;k++){
+                    if(j == k) continue;
+                    dp[i][k] = Math.max(dp[i][k],dp[i-1][j] + land[i][k]);
+                }   
             }
-
-            for(int i=0;i<4;i++){
-                tmpTmp[i] = tmpMaxArr[i];
-            }
+            
+            
         }
+        
+        int answer = 0;
+        for(int i=0;i<4;i++){
+            answer=  Math.max(answer,dp[land.length-1][i]);
+        }
+        
+        return answer;
     }
 }
