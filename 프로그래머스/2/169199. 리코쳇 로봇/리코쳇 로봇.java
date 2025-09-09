@@ -1,96 +1,74 @@
 import java.util.*;
-import java.io.*;
 class Solution {
-    class Point{
+    class Node{
         int y;
         int x;
-        int idx;
+        int move;
         
-        public Point(int y,int x,int idx){
+        public Node(int y,int x){
             this.y=y;
             this.x=x;
-            this.idx=idx;
         }
-        
-        public Point(int y,int x){
+        public Node(int y,int x,int move){
             this.y=y;
             this.x=x;
-            this.idx=0;
+            this.move = move;
         }
     }
     
-    Point end;
-    char[][] map;
-    int N;
-    int M;
     public int solution(String[] board) {
         int answer = 0;
-        map = new char[board.length][board[0].length()];
-        N = board.length;
-        M = board[0].length();
-        
-        int rowIdx = 0;
-
-        
-        Point start = null;
-
+        char[][] map = new char[board.length][board[0].length()];
+        int row = 0;
+        Node start = null;
         for(String s : board){
-            for(int colIdx=0;colIdx<s.length();colIdx++){
-                map[rowIdx][colIdx] = s.charAt(colIdx);
-                if(map[rowIdx][colIdx] == 'R'){
-                    start = new Point(rowIdx,colIdx);
-                }else if(map[rowIdx][colIdx] == 'G'){
-                    end = new Point(rowIdx,colIdx);
+            for(int i=0;i<s.length();i++){
+                char ch = s.charAt(i);
+                map[row][i] = ch;
+                if(map[row][i] == 'R'){
+                    start = new Node(row,i);
                 }
             }
-            rowIdx++;
+            row++;
         }
         
-        return bfs(start);
-    }
-    
-    int[] dy = {-1,1,0,0};
-    int[] dx = {0,0,-1,1}; 
-    public int bfs(Point start){
-        boolean[][] visit = new boolean[101][101];
-        Queue<Point> que = new LinkedList<>();
+        Queue<Node> que = new LinkedList<>();
         que.add(start);
+        int M = board[0].length();
+        boolean[][] visit = new boolean[row][board[0].length()];
         visit[start.y][start.x] = true;
+        
+        int[] dy = {-1,1,0,0};
+        int[] dx = {0,0,-1,1};
+        
         while(!que.isEmpty()){
-            Point point = que.poll();
-            if(map[point.y][point.x] == 'G'){
-                return point.idx;
-                
+            Node cur = que.poll();
+            if(map[cur.y][cur.x] == 'G'){
+                return cur.move;
             }
             for(int i=0;i<4;i++){
-                int nY = point.y + dy[i];
-                int nX = point.x + dx[i];
-                
-                while(isValid(nY,nX)){
-                    if(map[nY][nX] == 'D'){
+                int tmpY = cur.y;
+                int tmpX = cur.x;
+                while(true){
+                    tmpY += dy[i];
+                    tmpX += dx[i];
+                    //장애물, 외부에 부딪혔을때
+                    if((tmpY < 0 || tmpX < 0 || tmpY >= row || tmpX >= M) || map[tmpY][tmpX] == 'D'){
+                        tmpY -= dy[i];
+                        tmpX -= dx[i];
+                        if(visit[tmpY][tmpX]) break;
+                        que.add(new Node(tmpY,tmpX,cur.move+1));
+                        visit[tmpY][tmpX] = true;
                         break;
                     }
-                    nY += dy[i];
-                    nX += dx[i];
+                    
                 }
                 
-                nY -= dy[i];
-                nX -= dx[i];
-
-                
-                if(visit[nY][nX]) continue;
-                visit[nY][nX] = true;
-                que.add(new Point(nY,nX,point.idx+1));
             }
         }
+        
+        
+        
         return -1;
-
-    }
-   
-    public boolean isValid(int nY,int nX){
-        if(nY < 0 || nX < 0 || nY >= N || nX >= M){
-            return false;
-        }
-        return true;
     }
 }
