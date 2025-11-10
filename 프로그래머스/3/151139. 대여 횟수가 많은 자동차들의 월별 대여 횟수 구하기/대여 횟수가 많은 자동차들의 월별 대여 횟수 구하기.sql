@@ -1,0 +1,23 @@
+SELECT
+    MONTH(START_DATE) AS MONTH,
+    CAR_ID,
+    COUNT(CAR_ID) AS RECORDS
+FROM
+    CAR_RENTAL_COMPANY_RENTAL_HISTORY
+WHERE
+    -- [조건 1] 8월부터 10월까지
+    START_DATE >= '2022-08-01' AND START_DATE < '2022-11-01'
+    -- [조건 2] 이 기간 동안 "총" 5회 이상 대여된 차만 포함
+    AND CAR_ID IN (
+        SELECT CAR_ID
+        FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+        WHERE START_DATE >= '2022-08-01' AND START_DATE < '2022-11-01'
+        GROUP BY CAR_ID
+        HAVING COUNT(CAR_ID) >= 5
+    )
+GROUP BY
+    MONTH(START_DATE), CAR_ID
+-- [수정] 0인 경우 제외는 GROUP BY에서 자동으로 처리되므로
+-- 월별 5회 이상이라는 잘못된 HAVING 조건은 삭제합니다.
+ORDER BY
+    MONTH, CAR_ID DESC;
