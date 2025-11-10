@@ -5,63 +5,55 @@ class Solution {
         int left;
         int right;
         int val;
-        
-        public Node(int start,int next,int val){
-            this.left=start;
-            this.right=next;
+        public Node(int left,int right,int val){
+            this.left=left;
+            this.right=right;
             this.val=val;
         }
     }
+    
+    List<Node> list = new ArrayList<>();
+    int[] parent;
     public int solution(int n, int[][] costs) {
-        int answer = 0;
-        
-        List<Node> list = new ArrayList<>();
-        
-        for(int i=0;i<costs.length;i++){
-            int left = costs[i][0];
-            int right = costs[i][1];
-            int val = costs[i][2];
-            list.add(new Node(left,right,val));
-        }
-        
-        Collections.sort(list,((o1,o2) -> o1.val - o2.val));
-        parent = new int[n+1];
-
+        this.parent = new int[n+1];
         for(int i=0;i<=n;i++){
             parent[i] = i;
         }
         
+        for(int i=0;i<costs.length;i++){
+            list.add(new Node(costs[i][0],costs[i][1],costs[i][2]));
+        }
+        Collections.sort(list,(o1,o2) ->o1.val - o2.val);
+        
+        int result = 0;
+        
         for(Node node : list){
-            int left = find(node.left);
-            int right = find(node.right);
-            
-            if(left != right){
-                union(left,right);
-                answer+= node.val;
+            int a = find(node.left);
+            int b = find(node.right);
+            if(a != b){
+                union(a,b);
+                result += node.val;
             }
+            
+            
         }
         
-        return answer;
-    }
-    
-    int[] parent;
-    public int find(int idx){
-        if(parent[idx] == idx){
-            return idx;
-        }
         
-        return find(parent[idx]);
+        return result;
     }
     
-    
-    public void union(int left,int right){
-        int l = find(left);
-        int r = find(right);
-        if(l < r){
-            parent[l] = r;
+    public void union(int a,int b){
+        int ax = find(a);
+        int bx = find(b);
+        if(ax < bx){
+            parent[ax] = bx;
         }else{
-            parent[r] = l;
+            parent[ax] = bx;
         }
-        
+    }
+    
+    public int find(int x){
+        if(x == parent[x]) return x;
+        return find(parent[x]); 
     }
 }
